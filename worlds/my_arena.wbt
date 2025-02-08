@@ -8,14 +8,15 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.5502452904034103 -0.5746718153578237 -0.605790743592381 4.213290761773413
-  position 0.5811215567163011 -0.6344434118214244 10.110841925329071
+  orientation 0.6142800916814432 -0.47165983286410934 -0.6326112321374306 4.235555513297924
+  position -0.1591305476795813 -0.15987029333961697 1.2812707923764672
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
+  translation -0.01 0 0
   floorSize 7 7
   floorAppearance PBRAppearance {
     baseColor 0.12549 0.0862745 0.0627451
@@ -117,5 +118,43 @@ Pose {
         ]
       }
     }
+  ]
+}
+Robot {
+  translation -0.01 0 1.62771e-08
+  rotation 0 1 0 1.62771e-06
+  children [
+    Solid {
+      translation 0.01000000001298975 -0.00999988 0.10996001961919474
+      rotation 1 -1.8354153528693476e-15 3.6832146281447804e-16 5.307179586466759e-06
+      children [
+        Pose {
+          translation -0.09 0.09 -0.00499204
+          rotation 1 0 0 1.57
+          children [
+            Shape {
+              geometry Mesh {
+                url [
+                  "../RoboParts/topCylinder.STL"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+      name "top"
+      boundingObject Cylinder {
+        height 0.01
+        radius 0.09
+      }
+      physics Physics {
+      }
+      linearVelocity 0 0 -3.0899977875633744e-08
+    }
+  ]
+  name "AutoNova"
+  model "v1"
+  battery [
+    0
   ]
 }
