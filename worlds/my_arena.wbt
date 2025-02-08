@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5756684600088448 0.5834318092751168 0.5728988986522916 2.14361923379727
-  position 1.069064134076557 0.19002412004089636 11.639760905175807
+  orientation 0.5502452904034103 -0.5746718153578237 -0.605790743592381 4.213290761773413
+  position 0.5811215567163011 -0.6344434118214244 10.110841925329071
 }
 TexturedBackground {
 }
@@ -65,7 +65,7 @@ Wall {
   name "wall(4)"
   size 0.01 2.26 0.1
 }
-Transform {
+Pose {
   translation -0.5 2.6 0
   rotation 1 0 0 1.5707996938995747
   children [
@@ -77,13 +77,13 @@ Transform {
       }
       geometry Mesh {
         url [
-          "../../evaluation_maze1.obj"
+          "../3D_maze/evaluation_maze1.obj"
         ]
       }
     }
   ]
 }
-Transform {
+Pose {
   translation -0.5 2.6 0
   rotation 1 0 0 1.5707996938995747
   children [
@@ -95,13 +95,13 @@ Transform {
       }
       geometry Mesh {
         url [
-          "../../evaluation_maze2.obj"
+          "../3D_maze/evaluation_maze2.obj"
         ]
       }
     }
   ]
 }
-Transform {
+Pose {
   translation -0.5 2.6 0
   rotation 1 0 0 1.5707996938995747
   children [
@@ -113,7 +113,7 @@ Transform {
       }
       geometry Mesh {
         url [
-          "../../evaluation_maze3.obj"
+          "../3D_maze/evaluation_maze3.obj"
         ]
       }
     }
