@@ -1,0 +1,121 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5756684600088448 0.5834318092751168 0.5728988986522916 2.14361923379727
+  position 1.069064134076557 0.19002412004089636 11.639760905175807
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 7 7
+  floorAppearance PBRAppearance {
+    baseColor 0.12549 0.0862745 0.0627451
+    roughness 1
+    roughnessMap ImageTexture {
+      url [
+        "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/parquetry/mosaic_parquetry_roughness.jpg"
+      ]
+    }
+    metalness 0
+    normalMap ImageTexture {
+      url [
+        "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/parquetry/mosaic_parquetry_normal.jpg"
+      ]
+    }
+    occlusionMap ImageTexture {
+      url [
+        "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/parquetry/mosaic_parquetry_occlusion.jpg"
+      ]
+    }
+  }
+}
+Wall {
+  translation -2.65 0.07 0
+  size 0.01 5.04 0.1
+}
+Wall {
+  translation 2.4 0.06 0
+  name "wall(1)"
+  size 0.01 5.04 0.1
+}
+Wall {
+  translation -0.130008 2.59 0
+  rotation 0 0 1 1.5707996938995747
+  name "wall(2)"
+  size 0.01 5.04 0.1
+}
+Wall {
+  translation -1.39998 -2.46 0
+  rotation 0 0 1 1.5707996938995747
+  name "wall(3)"
+  size 0.01 2.5 0.1
+}
+Wall {
+  translation 1.25002 -2.46 0
+  rotation 0 0 1 1.5707996938995747
+  name "wall(4)"
+  size 0.01 2.26 0.1
+}
+Transform {
+  translation -0.5 2.6 0
+  rotation 1 0 0 1.5707996938995747
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 0.972549 0.972549 0.972549
+        }
+      }
+      geometry Mesh {
+        url [
+          "../../evaluation_maze1.obj"
+        ]
+      }
+    }
+  ]
+}
+Transform {
+  translation -0.5 2.6 0
+  rotation 1 0 0 1.5707996938995747
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 1 0.498039
+        }
+      }
+      geometry Mesh {
+        url [
+          "../../evaluation_maze2.obj"
+        ]
+      }
+    }
+  ]
+}
+Transform {
+  translation -0.5 2.6 0
+  rotation 1 0 0 1.5707996938995747
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0.333333 0
+        }
+      }
+      geometry Mesh {
+        url [
+          "../../evaluation_maze3.obj"
+        ]
+      }
+    }
+  ]
+}
