@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.06025874984011535 0.05786026316868649 0.9965044269915497 1.6142519039962977
-  position 0.10235240879943398 -1.4032046763944808 0.4912637330873463
+  orientation -0.3586922819531588 0.29929460142067105 0.8841733927390473 1.8702427298296853
+  position 0.48147946841624156 -3.3108040302618944 2.737882839468095
 }
 TexturedBackground {
 }
@@ -106,7 +106,7 @@ Robot {
   translation 0.03 0.0575 0.03
   rotation 0 1 0 1.62771e-06
   children [
-    DEF wheel_complete HingeJoint {
+    HingeJoint {
       jointParameters HingeJointParameters {
         position 2.464267769777152e-08
       }
@@ -119,8 +119,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.06099999999999999 -3.015130187033136e-15 1.2235399999999996e-07
-        rotation 1.2321351411917899e-08 -0.9999999999999998 -1.232133884888576e-08 1.5707953071795866
+        translation -0.06099999999935347 -1.0344618670003168e-14 -2.78149744039474e-07
+        rotation 1.9247231761800903e-09 -0.9999999999999999 -1.924720567061186e-09 1.5707953315197476
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -135,15 +135,13 @@ Robot {
         ]
         name "LeftWheel"
         boundingObject USE wheel
-        physics DEF physics_wh Physics {
+        physics Physics {
         }
-        linearVelocity -6.318497051438416e-17 -3.0181692385967523e-14 -3.101787010076362e-09
-        angularVelocity 2.4667914205374614e-07 -1.8851308365358648e-10 -3.955195115889404e-13
       }
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 2.3834719959851e-08
+        position -3.829343962272654e-11
       }
       device [
         DEF posR PositionSensor {
@@ -153,8 +151,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0.05899999999999999 0 0
-        rotation 1.1917372131054388e-08 -0.9999999999999998 -1.19173599799255e-08 1.5707953071795866
+        translation 0.05899999999999998 0 0
+        rotation -5.7440218000987984e-11 -0.9999999999999999 5.744015943408982e-11 1.5707953071795866
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -171,8 +169,6 @@ Robot {
         boundingObject USE wheel
         physics DEF physics_wh Physics {
         }
-        linearVelocity -1.9123453781151138e-16 5.3139200935665576e-21 -3.1010453518435274e-09
-        angularVelocity 2.385912833517546e-07 1.8231936472373663e-10 -3.9397288037599516e-13
       }
     }
     DEF Body Shape {
@@ -184,8 +180,8 @@ Robot {
       }
     }
     Solid {
-      translation 0.08500000000529473 -0.085 0.019990247140535072
-      rotation -1.497354102188018e-22 -1.497354102188018e-22 1 1.5708
+      translation 0.08500000001059471 -0.085 0.01998699105674065
+      rotation -2.994708204376036e-22 -1.497354102188018e-22 1 1.5708
       children [
         Shape {
           appearance PBRAppearance {
@@ -207,7 +203,7 @@ Robot {
       }
       physics Physics {
       }
-      linearVelocity 0 0 -2.519058458472838e-08
+      linearVelocity 0 0 -6.850363494648173e-17
     }
   ]
   name "AutoNova"
