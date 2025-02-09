@@ -4,19 +4,22 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "../protos/E-puck.proto"
 
 WorldInfo {
 }
 Viewpoint {
+
   orientation -0.06025874984011535 0.05786026316868649 0.9965044269915497 1.6142519039962977
   position 0.10235240879943398 -1.4032046763944808 0.4912637330873463
+
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  translation -0.01 0 0
+  translation 0 0 -0.0042861
   floorSize 7 7
   floorAppearance PBRAppearance {
     baseColor 0.12549 0.0862745 0.0627451
@@ -38,6 +41,21 @@ RectangleArena {
       ]
     }
   }
+}
+E-puck {
+  hidden position_0_0 105.64947020279233
+  hidden position_0_1 119.20084353661404
+  hidden linearVelocity_0 1.0640485571999116e-13 -2.2140905789914495e-13 -7.058057841883662e-15
+  hidden angularVelocity_0 1.4427350171193126e-11 6.611013155225001e-12 1.1013626284836604e-07
+  hidden rotation_1 0 1 0 5.118505287918946
+  hidden linearVelocity_1 1.2365800167750416e-09 -2.6333217844135093e-09 2.220445866951554e-16
+  hidden angularVelocity_1 1.3286565954813577e-07 6.239229557646126e-08 1.101362616830851e-07
+  hidden rotation_2 0 0.9999999999999999 0 6.103508007381488
+  hidden linearVelocity_2 -1.2363052609757323e-09 2.632733329713487e-09 -1.199040439904475e-15
+  hidden angularVelocity_2 -1.328361416456615e-07 -6.23787451696957e-08 1.1013626355225867e-07
+  translation -1.3330773550466553 1.201421539632367 -0.004350061995788343
+  rotation 5.355932621518799e-10 8.418792429821617e-10 1 2.0098200037398457
+  controller "my_controller"
 }
 Wall {
   translation -2.65 0.07 0
@@ -70,6 +88,13 @@ Pose {
   translation -0.5 2.6 0
   rotation 1 0 0 1.5707996938995747
   children [
+    Solid {
+      boundingObject Mesh {
+        url [
+          "../3D_maze/evaluation_maze1.obj"
+        ]
+      }
+    }
     Shape {
       appearance Appearance {
         material Material {
@@ -80,6 +105,7 @@ Pose {
         url [
           "../3D_maze/evaluation_maze1.obj"
         ]
+        name "mesh01"
       }
     }
   ]
@@ -88,6 +114,14 @@ Pose {
   translation -0.5 2.6 0
   rotation 1 0 0 1.5707996938995747
   children [
+    Solid {
+      name "solid(1)"
+      boundingObject Mesh {
+        url [
+          "../3D_maze/evaluation_maze2.obj"
+        ]
+      }
+    }
     Shape {
       appearance Appearance {
         material Material {
@@ -106,6 +140,7 @@ Robot {
   translation 0.03 0.0575 0.03
   rotation 0 1 0 1.62771e-06
   children [
+
     DEF wheel_complete HingeJoint {
       jointParameters HingeJointParameters {
         position 2.464267769777152e-08
@@ -136,6 +171,20 @@ Robot {
         name "LeftWheel"
         boundingObject USE wheel
         physics DEF physics_wh Physics {
+
+    Solid {
+      name "solid(2)"
+      boundingObject Mesh {
+        url [
+          "../3D_maze/evaluation_maze3.obj"
+        ]
+      }
+    }
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0.333333 0
+
         }
         linearVelocity -6.318497051438416e-17 -3.0181692385967523e-14 -3.101787010076362e-09
         angularVelocity 2.4667914205374614e-07 -1.8851308365358648e-10 -3.955195115889404e-13
@@ -183,6 +232,7 @@ Robot {
         size 0.1 0.1 0.04
       }
     }
+
     Solid {
       translation 0.08500000000529473 -0.085 0.019990247140535072
       rotation -1.497354102188018e-22 -1.497354102188018e-22 1 1.5708
@@ -214,5 +264,6 @@ Robot {
   model "v1"
   battery [
     0
+
   ]
 }
