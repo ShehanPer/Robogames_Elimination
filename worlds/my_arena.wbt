@@ -9,24 +9,22 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.06335731220613593 0.14404080284739376 -0.9875414412089716 1.1576615636206733
-  position 1.9553853125098393 4.068410308773738 0.5254225957741743
+  orientation -0.2785436048717602 0.24620967223359833 0.9283287442946431 1.7672802232834943
+  position 1.1256430821444678 -0.6649750540864601 0.33320554503729954
+  follow "AutoNova"
+  followType "Pan and Tilt Shot"
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
+  castShadows FALSE
 }
 RectangleArena {
   translation -0.01 0 0
   floorSize 7 7
   floorAppearance PBRAppearance {
-    baseColor 0.12549 0.0862745 0.0627451
+    baseColor 0.35 0.4 0.3
     roughness 1
-    roughnessMap ImageTexture {
-      url [
-        "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/textures/parquetry/mosaic_parquetry_roughness.jpg"
-      ]
-    }
     metalness 0
     normalMap ImageTexture {
       url [
@@ -104,64 +102,66 @@ Pose {
   ]
 }
 Robot {
-  translation 2.75 2.9375 0.0299955
-  rotation 0 1 0 1.62771e-06
+  translation 1.0673191549983678 -0.193497124570206 0.01991085647143303
+  rotation -2.5443800947770214e-08 6.684666796597321e-11 -0.9999999999999998 0.005095756222499305
   children [
     E-puckDistanceSensor {
-      translation -0.0499992 0.076 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds07"
+      translation -0.060104 0.060104 0.025
+      rotation 0.28108214909598983 0.6785993599532862 -0.6785983599527559 -2.593565307179586
+      name "ps7"
     }
     E-puckDistanceSensor {
-      translation -0.0999998 -0.00400005 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds6"
+      translation -0.085 0 0.025
+      rotation -2.4545692404262723e-06 0.7071077811834008 -0.7071057811840198 3.14159
+      name "ps6"
     }
     E-puckDistanceSensor {
-      translation -0.0799991 -0.054 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds5"
+      translation -0.060104 -0.060104 0.025
+      rotation 0.28108694479748086 -0.6785988667303209 0.6785968667307137 -2.593555307179586
+      name "ps5"
     }
     E-puckDistanceSensor {
-      translation 1.09451e-06 -0.094 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds4"
+      translation 0 -0.085 0.025
+      rotation -0.5773519358536056 0.5773509358537166 -0.5773479358540499 2.09439
+      name "ps4"
     }
     E-puckDistanceSensor {
-      translation 0.060001 -0.064 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds3"
+      translation 0.060104 -0.060104 0.025
+      rotation -0.7745983069369637 0.44721317720959824 -0.44721117720880577 1.82347
+      name "ps3"
     }
     E-puckDistanceSensor {
-      translation 0.09 -0.00400005 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds2"
+      translation 0.085 0 0.025
+      rotation -0.9999999999931786 -1.2753299999913004e-06 3.4664999999763536e-06 1.57079
+      name "ps2"
     }
     E-puckDistanceSensor {
-      translation 0.073 0.043 0.025
+      translation 0.060104 0.060104 0.025
       rotation -0.8628548176054536 -0.35740792444933384 0.3574089244491224 1.71777
-      name "ds1"
+      name "ps1"
     }
     E-puckDistanceSensor {
-      translation 2.41849e-07 0.086 0.025
+      translation 0 0.085 0.025
       rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ds0"
+      name "ps0"
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 2.464267769777152e-08
+        position -1.3120270106968302e-12
+        axis 0 1 0
+        anchor 0 0.06 0.01
       }
       device [
         PositionSensor {
-          name "posL"
+          name "left encoder"
         }
         RotationalMotor {
-          name "motL"
+          name "left motor"
         }
       ]
       endPoint Solid {
-        translation -0.06099999999935345 -1.0344618670003165e-14 -2.7814974403947397e-07
-        rotation 1.9247231761800903e-09 -0.9999999999999999 -1.924720567061186e-09 1.5707953315197476
+        translation 0 0.06 0.01
+        rotation 1 -4.184923660838354e-11 4.1849389363712775e-11 1.5707999999987055
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -178,23 +178,27 @@ Robot {
         boundingObject USE wheel
         physics Physics {
         }
+        linearVelocity -2.944085579315311e-13 1.092914264492164e-15 -3.032124474265524e-16
+        angularVelocity -4.2855020897605754e-14 -1.3116743530506802e-11 1.179293803191542e-12
       }
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -3.829343962272654e-11
+        position 1.2777659801797784e-12
+        axis 0 1 0
+        anchor 0 -0.06 0.01
       }
       device [
         PositionSensor {
-          name "posR"
+          name "right encoder"
         }
         RotationalMotor {
-          name "motR"
+          name "right motor"
         }
       ]
       endPoint Solid {
-        translation 0.05899999999999998 0 0
-        rotation -1.3402717533563552e-10 -0.9999999999999999 1.3402703867954292e-10 1.5707953071795866
+        translation 0 -0.06 0.01
+        rotation -0.07804986893915082 0.7049484261742475 -0.7049510155982707 -2.9858093072697
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -211,9 +215,11 @@ Robot {
         boundingObject USE wheel
         physics DEF physics_wh Physics {
         }
+        linearVelocity 2.84820558950783e-13 -1.5636523003944068e-15 -6.381591235505942e-16
+        angularVelocity 6.637562607571138e-14 1.2769288404541927e-11 1.1793029251714688e-12
       }
     }
-    Shape {
+    DEF Body Shape {
       appearance PBRAppearance {
         metalness 0
       }
@@ -222,8 +228,7 @@ Robot {
       }
     }
     Solid {
-      translation 0.08500000001059471 -0.085 0.01998699105674065
-      rotation -2.994708204376036e-22 -1.497354102188018e-22 1 1.5708
+      translation -0.0859 -0.0853 0.019987
       children [
         Shape {
           appearance PBRAppearance {
@@ -243,13 +248,16 @@ Robot {
           "../RoboParts/topCylinder.STL"
         ]
       }
-      physics Physics {
-      }
     }
   ]
   name "AutoNova"
   model "v1"
+  boundingObject USE Body
+  physics Physics {
+  }
   battery [
     0
   ]
+  linearVelocity -4.6806693919556135e-16 3.597003409388576e-17 2.0219603523553455e-17
+  angularVelocity -5.8340195949694476e-15 -2.9196139039064173e-15 1.1793146198136753e-12
 }
