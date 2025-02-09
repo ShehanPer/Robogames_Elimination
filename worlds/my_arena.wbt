@@ -9,8 +9,10 @@ EXTERNPROTO "../protos/E-puck.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.42509820912859286 0.4940717032767724 -0.7584092988728791 1.929109873627698
-  position -0.3817524576215441 4.3332807077139215 5.683728330896911
+
+  orientation -0.06025874984011535 0.05786026316868649 0.9965044269915497 1.6142519039962977
+  position 0.10235240879943398 -1.4032046763944808 0.4912637330873463
+
 }
 TexturedBackground {
 }
@@ -123,21 +125,53 @@ Pose {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 1 0.498039
+          diffuseColor 1 0.333333 0
         }
       }
       geometry Mesh {
         url [
-          "../3D_maze/evaluation_maze2.obj"
+          "../3D_maze/evaluation_maze3.obj"
         ]
       }
     }
   ]
 }
-Pose {
-  translation -0.5 2.6 0
-  rotation 1 0 0 1.5707996938995747
+Robot {
+  translation 0.03 0.0575 0.03
+  rotation 0 1 0 1.62771e-06
   children [
+
+    DEF wheel_complete HingeJoint {
+      jointParameters HingeJointParameters {
+        position 2.464267769777152e-08
+      }
+      device [
+        PositionSensor {
+          name "posL"
+        }
+        RotationalMotor {
+          name "motL"
+        }
+      ]
+      endPoint Solid {
+        translation -0.06099999999999999 -3.015130187033136e-15 1.2235399999999996e-07
+        rotation 1.2321351411917899e-08 -0.9999999999999998 -1.232133884888576e-08 1.5707953071795866
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.009
+              radius 0.03
+            }
+          }
+        ]
+        name "LeftWheel"
+        boundingObject USE wheel
+        physics DEF physics_wh Physics {
+
     Solid {
       name "solid(2)"
       boundingObject Mesh {
@@ -150,13 +184,86 @@ Pose {
       appearance Appearance {
         material Material {
           diffuseColor 1 0.333333 0
+
         }
-      }
-      geometry Mesh {
-        url [
-          "../3D_maze/evaluation_maze3.obj"
-        ]
+        linearVelocity -6.318497051438416e-17 -3.0181692385967523e-14 -3.101787010076362e-09
+        angularVelocity 2.4667914205374614e-07 -1.8851308365358648e-10 -3.955195115889404e-13
       }
     }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 2.3834719959851e-08
+      }
+      device [
+        DEF posR PositionSensor {
+        }
+        RotationalMotor {
+          name "motR"
+        }
+      ]
+      endPoint Solid {
+        translation 0.05899999999999999 0 0
+        rotation 1.1917372131054388e-08 -0.9999999999999998 -1.19173599799255e-08 1.5707953071795866
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 1
+              metalness 0
+            }
+            geometry DEF wheel_geo Cylinder {
+              height 0.009
+              radius 0.03
+            }
+          }
+        ]
+        name "RightWheel"
+        boundingObject USE wheel
+        physics DEF physics_wh Physics {
+        }
+        linearVelocity -1.9123453781151138e-16 5.3139200935665576e-21 -3.1010453518435274e-09
+        angularVelocity 2.385912833517546e-07 1.8231936472373663e-10 -3.9397288037599516e-13
+      }
+    }
+    DEF Body Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.1 0.1 0.04
+      }
+    }
+
+    Solid {
+      translation 0.08500000000529473 -0.085 0.019990247140535072
+      rotation -1.497354102188018e-22 -1.497354102188018e-22 1 1.5708
+      children [
+        Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
+          geometry Mesh {
+            url [
+              "../RoboParts/topCylinder.STL"
+            ]
+            name "top cylinder"
+          }
+        }
+      ]
+      name "top"
+      boundingObject Mesh {
+        url [
+          "../RoboParts/topCylinder.STL"
+        ]
+      }
+      physics Physics {
+      }
+      linearVelocity 0 0 -2.519058458472838e-08
+    }
+  ]
+  name "AutoNova"
+  model "v1"
+  battery [
+    0
+
   ]
 }
