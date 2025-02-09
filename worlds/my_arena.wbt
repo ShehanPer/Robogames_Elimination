@@ -4,12 +4,13 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puckDistanceSensor.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.3586922819531588 0.29929460142067105 0.8841733927390473 1.8702427298296853
-  position 0.48147946841624156 -3.3108040302618944 2.737882839468095
+  orientation -0.06335731220613593 0.14404080284739376 -0.9875414412089716 1.1576615636206733
+  position 1.9553853125098393 4.068410308773738 0.5254225957741743
 }
 TexturedBackground {
 }
@@ -103,9 +104,49 @@ Pose {
   ]
 }
 Robot {
-  translation 0.03 0.0575 0.03
+  translation 2.75 2.9375 0.0299955
   rotation 0 1 0 1.62771e-06
   children [
+    E-puckDistanceSensor {
+      translation -0.0499992 0.076 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds07"
+    }
+    E-puckDistanceSensor {
+      translation -0.0999998 -0.00400005 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds6"
+    }
+    E-puckDistanceSensor {
+      translation -0.0799991 -0.054 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds5"
+    }
+    E-puckDistanceSensor {
+      translation 1.09451e-06 -0.094 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds4"
+    }
+    E-puckDistanceSensor {
+      translation 0.060001 -0.064 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds3"
+    }
+    E-puckDistanceSensor {
+      translation 0.09 -0.00400005 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds2"
+    }
+    E-puckDistanceSensor {
+      translation 0.073 0.043 0.025
+      rotation -0.8628548176054536 -0.35740792444933384 0.3574089244491224 1.71777
+      name "ds1"
+    }
+    E-puckDistanceSensor {
+      translation 2.41849e-07 0.086 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ds0"
+    }
     HingeJoint {
       jointParameters HingeJointParameters {
         position 2.464267769777152e-08
@@ -119,7 +160,7 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -0.06099999999935347 -1.0344618670003168e-14 -2.78149744039474e-07
+        translation -0.06099999999935345 -1.0344618670003165e-14 -2.7814974403947397e-07
         rotation 1.9247231761800903e-09 -0.9999999999999999 -1.924720567061186e-09 1.5707953315197476
         children [
           DEF wheel Shape {
@@ -127,7 +168,7 @@ Robot {
               baseColor 0 1 1
               metalness 0
             }
-            geometry Cylinder {
+            geometry DEF wheel_geo Cylinder {
               height 0.009
               radius 0.03
             }
@@ -144,7 +185,8 @@ Robot {
         position -3.829343962272654e-11
       }
       device [
-        DEF posR PositionSensor {
+        PositionSensor {
+          name "posR"
         }
         RotationalMotor {
           name "motR"
@@ -152,7 +194,7 @@ Robot {
       ]
       endPoint Solid {
         translation 0.05899999999999998 0 0
-        rotation -5.7440218000987984e-11 -0.9999999999999999 5.744015943408982e-11 1.5707953071795866
+        rotation -1.3402717533563552e-10 -0.9999999999999999 1.3402703867954292e-10 1.5707953071795866
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -171,7 +213,7 @@ Robot {
         }
       }
     }
-    DEF Body Shape {
+    Shape {
       appearance PBRAppearance {
         metalness 0
       }
@@ -203,7 +245,6 @@ Robot {
       }
       physics Physics {
       }
-      linearVelocity 0 0 -6.850363494648173e-17
     }
   ]
   name "AutoNova"
