@@ -69,7 +69,7 @@ def readSensors():
 
 def runRobot():
     while robot.step(tstep) != -1:
-        moveForward()
+        turnLeft()
 
 if __name__ == "__main__":
 
