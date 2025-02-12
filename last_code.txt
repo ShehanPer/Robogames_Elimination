@@ -1,0 +1,26 @@
+# Main loop
+def search_maze(direction):
+    dir = get_direction()
+
+    if direction == -1:
+        turnLeft()
+        moveForward()
+    if direction == 0:
+        moveForward()
+    if direction == 1:
+        turnRight()
+        moveForward()
+    
+moveForward()
+while robot.step(timestep) != -1:
+        dir = get_direction()
+        if dir[0] == 0:
+            search_maze(-1)
+        elif (dir[0]==1 and dir[1] == 0):
+            search_maze(0)
+        elif dir[0]==1 and dir[1] == 1 and dir[2] == 0:
+            search_maze(1)
+        else:
+            turnReverse()
+
+    

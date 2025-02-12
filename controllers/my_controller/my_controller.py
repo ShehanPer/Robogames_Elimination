@@ -35,7 +35,7 @@ L_motor.setPosition(float('inf'))
 R_motor.setPosition(float('inf'))
 
 inertial_unit =get_device('Inertial Unit')
-gyro = get_device('gyro')
+gyro = get_device('gyroScope')
 
 camera=get_device('camera')
 
@@ -116,7 +116,7 @@ def moveForward():
         travel_time=end_time-start_time
         distance_T = 2*0.03*travel_time
         print('Distance:', distance_T)
-        print('gyro',gyro.getValues())
+        #print('gyro',gyro.getValues())
         if(0.25<=distance_T<0.26):
             stoping =True
             print("stoping")
@@ -193,29 +193,75 @@ def get_direction():
     return dir
 maze_array = np.zeros((20, 20))
 
-# Main loop
-def search_maze(direction):
-    dir = get_direction()
+# Define a 20x20 grid with all zeros (0 = unvisited, 1 = visited)
+maze_map = [[0] * 20 for _ in range(20)]
 
-    if direction == -1:
+# Initial robot position
+robot_x, robot_y = 10, 0  # Assuming the robot starts at (0, 0)
+
+def backtrack(previous_direction):
+    """Turn the robot back to the original direction after backtracking"""
+    if previous_direction == "LEFT":
+        turnRight()  # Face back to original direction
+    elif previous_direction == "RIGHT":
+        turnLeft()  # Face back to original direction
+    elif previous_direction == "UP":
+        turnReverse()  # 180° turn to go back
+    elif previous_direction == "DOWN":
+        turnReverse()  # 180° turn to go back
+
+# Directions mapping (dx, dy)
+DIRECTION_MAP = {
+    "UP": (0, 1),
+    "DOWN": (0, -1),
+    "LEFT": (-1, 0),
+    "RIGHT": (1, 0),
+}
+
+def update_position(direction):
+    """Update (x, y) based on movement direction"""
+    global robot_x, robot_y
+
+    dx, dy = DIRECTION_MAP[direction]
+    robot_x += dx
+    robot_y += dy
+
+def search_maze(previous_direction=None):
+    """Recursive maze search with proper backtracking"""
+    global robot_x, robot_y, maze_map
+    print(maze_map)
+    if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
+        return  # Out of bounds
+
+    if maze_map[robot_x][robot_y] == 1:
+        return  # Already visited
+
+    # Mark as visited
+    maze_map[robot_x][robot_y] = 1
+
+    dir = get_direction()  # Get sensor readings
+
+    if dir[0] == 0:  # Left open
         turnLeft()
         moveForward()
-    if direction == 0:
+        update_position("LEFT")
+        search_maze("LEFT")
+        backtrack("LEFT")  # 🔥 Use proper backtracking
+
+    if dir[0] == 1 and dir[1] == 0:  # Forward open
         moveForward()
-    if direction == 1:
+        update_position("UP")
+        search_maze("UP")
+        backtrack("UP")  # 🔥 Use proper backtracking
+
+    if dir[0] == 1 and dir[1] == 1 and dir[2] == 0:  # Right open
         turnRight()
         moveForward()
-    while robot.step(timestep) != -1:
-        dir = get_direction()
-        if dir[0] == 0:
-            search_maze(-1)
-        elif (dir[0]==1 and dir[1] == 0):
-            search_maze(0)
-        elif dir[0]==1 and dir[1] == 1 and dir[2] == 0:
-            search_maze(1)
-        else:
-            turnReverse()
+        update_position("RIGHT")
+        search_maze("RIGHT")
+        backtrack("RIGHT")  # 🔥 Use proper backtracking
 
+
+# Start the search
 moveForward()
-search_maze
-    
+search_maze()
