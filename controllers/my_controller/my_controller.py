@@ -22,7 +22,7 @@ def get_device(device_name):
 
 
 # Get ultrasonic sensors
-us_names = ['ps0', 'ps2', 'ps4']  # Front, Left, Right
+us_names = ['ps4', 'ps2', 'ps0']  # Front, Left, Right
 IR_sensors = [get_device(name) for name in us_names]
 
 L_encoder = get_device('left encoder')
@@ -101,7 +101,7 @@ def moveForward():
         correction = kp * error + ki * integral + kd * derivative
         correction = round(correction, 3)
         
-        print("Correction:", correction)
+        #print("Correction:", correction)
 
         L_motor.setVelocity(2 - correction)
         R_motor.setVelocity(2 + correction)
@@ -115,7 +115,7 @@ def moveForward():
         end_time=robot.getTime()
         travel_time=end_time-start_time
         distance_T = 2*0.03*travel_time
-        print('Distance:', distance_T)
+        #print('Distance:', distance_T)
         #print('gyro',gyro.getValues())
         if(0.25<=distance_T<0.26):
             stoping =True
@@ -131,7 +131,7 @@ def turnRight():
     initial_Ryaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])  # Initial yaw
     target_angleR = normalize_angle(initial_Ryaw - math.radians(90))  # Target yaw (-90°)
 
-    print(f"Starting turn | Initial Yaw: {math.degrees(initial_Ryaw):.2f}° | Target Yaw: {math.degrees(target_angleR):.2f}°")
+    #print(f"Starting turn | Initial Yaw: {math.degrees(initial_Ryaw):.2f}° | Target Yaw: {math.degrees(target_angleR):.2f}°")
 
     L_motor.setVelocity(2)
     R_motor.setVelocity(-2)
@@ -140,7 +140,7 @@ def turnRight():
         current_Ryaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])
         yaw_diffR = math.degrees(abs(angular_difference(target_angleR, current_Ryaw)))  # Fix wraparound
 
-        print(f"Yaw: {math.degrees(current_Ryaw):.2f}° | ΔYaw: {yaw_diffR:.2f}° ")
+        #print(f"Yaw: {math.degrees(current_Ryaw):.2f}° | ΔYaw: {yaw_diffR:.2f}° ")
 
         if abs(yaw_diffR)<1:  # Stop when true yaw difference reaches 90°
             print("✅ Turn Complete! Stopping motors.")
@@ -157,7 +157,7 @@ def turnLeft():
    
     target_angleL= normalize_angle(initial_Lyaw+math.radians(90))  # Target yaw (-90 degrees)
     
-    print(f"Starting turn | Initial Yaw: {math.degrees(initial_Lyaw):.2f}° | Target Yaw: {math.degrees(target_angleL):.2f}°")
+    #print(f"Starting turn | Initial Yaw: {math.degrees(initial_Lyaw):.2f}° | Target Yaw: {math.degrees(target_angleL):.2f}°")
     
     L_motor.setVelocity(-2)
     R_motor.setVelocity(2)
@@ -167,7 +167,7 @@ def turnLeft():
 
         yaw_diffL = math.degrees(abs(angular_difference(target_angleL, cuurent_Lyaw))) 
 
-        print(f"Yaw: {math.degrees(cuurent_Lyaw):.2f}° | ΔYaw: {yaw_diffL:.2f}° ")
+        #print(f"Yaw: {math.degrees(cuurent_Lyaw):.2f}° | ΔYaw: {yaw_diffL:.2f}° ")
         
       
         if(abs(yaw_diffL)<1):
@@ -189,7 +189,7 @@ def get_direction():
     
     pass
 def get_direction():
-    dir = [1 if IR_sensors[i].getValue() > 80 else 0 for i in range(3)]
+    dir = [1 if IR_sensors[i].getValue() > 800 else 0 for i in range(3)]
     return dir
 maze_array = np.zeros((20, 20))
 
@@ -197,7 +197,7 @@ maze_array = np.zeros((20, 20))
 maze_map = [[0] * 20 for _ in range(20)]
 
 # Initial robot position
-robot_x, robot_y = 10, 0  # Assuming the robot starts at (0, 0)
+robot_x, robot_y = 19, 10  # Assuming the robot starts at (0, 0)
 
 def backtrack(previous_direction):
     """Turn the robot back to the original direction after backtracking"""
@@ -212,10 +212,10 @@ def backtrack(previous_direction):
 
 # Directions mapping (dx, dy)
 DIRECTION_MAP = {
-    "UP": (0, 1),
-    "DOWN": (0, -1),
-    "LEFT": (-1, 0),
-    "RIGHT": (1, 0),
+    "UP": (-1, 0),
+    "DOWN": (1, 0),
+    "LEFT": (0, -1),
+    "RIGHT": (0, 1),
 }
 
 def update_position(direction):
@@ -229,7 +229,8 @@ def update_position(direction):
 def search_maze(previous_direction=None):
     """Recursive maze search with proper backtracking"""
     global robot_x, robot_y, maze_map
-    print(maze_map)
+    for line in maze_map:
+        print(line)
     if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
         return  # Out of bounds
 
@@ -263,5 +264,5 @@ def search_maze(previous_direction=None):
 
 
 # Start the search
-moveForward()
+
 search_maze()
