@@ -13,6 +13,17 @@ robot = Robot()
 # Get the time step of the current world
 timestep = int(robot.getBasicTimeStep())
 
+# Directions mapping (dx, dy)
+DIRECTION_MAP = [(-1,0),(0,1),(1,0),(0,-1)] # UP, RIGHT, DOWN, LEFT
+maze_array = np.zeros((20, 20))
+
+# Define a 20x20 grid with all zeros (0 = unvisited, 1 = visited)
+maze_map = [[0] * 20 for _ in range(20)]
+
+# Initial robot position
+robot_x, robot_y = 19, 10  # Assuming the robot starts at (0, 0)
+
+
 # Function to get device instances
 def get_device(device_name):
     device = robot.getDevice(device_name)
@@ -119,7 +130,64 @@ def moveForward():
         #print('gyro',gyro.getValues())
         if(0.25<=distance_T<0.26):
             stoping =True
-            print("stoping")
+            print("stop forward")
+            L_motor.setVelocity(0)
+            R_motor.setVelocity(0)
+            robot.step(timestep*10)
+            break
+
+def moveBackward():
+    # PID for straight moves
+    global stoping
+
+    stoping = False
+    robot.step(timestep)
+
+    # Get initial encoder values as offsets
+    L_encoder_offset = L_encoder.getValue()
+    R_encoder_offset = R_encoder.getValue()
+
+    kp = 0.2
+    ki = 0.0001
+    kd = 0.01
+    integral = 0
+    derivative = 0
+    last_error = 0
+
+    LstartVal = 0  # Start at 0 since we're subtracting the offsets
+    start_time = robot.getTime()
+
+    while robot.step(timestep) != -1:
+        # Get encoder values and subtract offset
+        L_encoderVal = L_encoder.getValue() - L_encoder_offset
+        R_encoderVal = R_encoder.getValue() - R_encoder_offset
+
+        error = (L_encoderVal - R_encoderVal) * 4
+        integral += error
+        derivative = error - last_error
+        last_error = error
+        correction = kp * error + ki * integral + kd * derivative
+        correction = round(correction, 3)
+        
+        #print("Correction:", correction)
+
+        L_motor.setVelocity(- 2 + correction)
+        R_motor.setVelocity(- 2 - correction)
+
+        # Compute traveled distance
+        LendVal = L_encoderVal  # Since we already subtracted offset
+        distance = (LendVal - LstartVal) * 0.06 * 3.14 / 7
+        distance = round(distance, 3)
+        
+        
+        end_time=robot.getTime()
+        travel_time=end_time-start_time
+        distance_T = 2*0.03*travel_time
+        #print('Distance:', distance_T)
+        #print('gyro',gyro.getValues())
+        if(0.25<=distance_T<0.26):
+            stoping =True
+            print("stop forward")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
             robot.step(timestep*10)
@@ -176,6 +244,29 @@ def turnLeft():
             R_motor.setVelocity(0)
             break
     robot.step(timestep*10)
+
+
+def turnAngle(angle):
+    """ Turns the robot to a specific absolute yaw angle (0°, 90°, 180°, 270°).   Input should be in radians."""
+
+    # Get the current yaw angle
+    current_yaw = inertial_unit.getRollPitchYaw()[2]
+
+    L_motor.setVelocity(2)
+    R_motor.setVelocity(-2)  # Turn left
+
+    while robot.step(timestep) != -1:
+        current_yaw = inertial_unit.getRollPitchYaw()[2]
+        yaw_error = math.degrees(abs(angular_difference(angle, current_yaw)))
+
+        # Stop when within 1 degree of target
+        if yaw_error < 1:
+            L_motor.setVelocity(0)
+            R_motor.setVelocity(0)
+            print(f"✅ Turned to {math.degrees(angle):.2f}°")
+            break
+
+    robot.step(timestep * 10)  # Small delay after turning
        
 def turnReverse():
     turnRight()
@@ -185,84 +276,91 @@ def moveBack():
     #move 0.25 meter backward with pid
     pass
 
-def get_direction():
-    
-    pass
-def get_direction():
+
+def read_sensors():
     dir = [1 if IR_sensors[i].getValue() > 800 else 0 for i in range(3)]
     return dir
-maze_array = np.zeros((20, 20))
 
-# Define a 20x20 grid with all zeros (0 = unvisited, 1 = visited)
-maze_map = [[0] * 20 for _ in range(20)]
 
-# Initial robot position
-robot_x, robot_y = 19, 10  # Assuming the robot starts at (0, 0)
+
 
 def backtrack(previous_direction):
-    """Turn the robot back to the original direction after backtracking"""
+    """Turn the robot back to the original direction and move forward"""
+    moveBackward()
     if previous_direction == "LEFT":
-        turnRight()  # Face back to original direction
+        print("Backtracking LEFT")
+        turnRight()
+
     elif previous_direction == "RIGHT":
-        turnLeft()  # Face back to original direction
-    elif previous_direction == "UP":
-        turnReverse()  # 180° turn to go back
-    elif previous_direction == "DOWN":
-        turnReverse()  # 180° turn to go back
+        print("Backtracking RIGHT")
+        turnLeft()
+    else:
+        print("Backtracking UP")
 
-# Directions mapping (dx, dy)
-DIRECTION_MAP = {
-    "UP": (-1, 0),
-    "DOWN": (1, 0),
-    "LEFT": (0, -1),
-    "RIGHT": (0, 1),
-}
-
-def update_position(direction):
+    
+def update_position(direction,robot_x,robot_y):
     """Update (x, y) based on movement direction"""
-    global robot_x, robot_y
 
     dx, dy = DIRECTION_MAP[direction]
-    robot_x += dx
-    robot_y += dy
+    cell_x = robot_x + dx
+    cell_y = robot_y + dy
 
-def search_maze(previous_direction=None):
+    if maze_map[cell_x][cell_y] == 0:
+        robot_x = cell_x
+        robot_y = cell_y
+        return (robot_x,robot_y)
+    return None
+
+
+
+def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
     """Recursive maze search with proper backtracking"""
-    global robot_x, robot_y, maze_map
-    for line in maze_map:
-        print(line)
-    if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
-        return  # Out of bounds
+    global maze_map
 
-    if maze_map[robot_x][robot_y] == 1:
-        return  # Already visited
+    if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
+        print("Out of bounds")
+        return  # Out of bounds
 
     # Mark as visited
     maze_map[robot_x][robot_y] = 1
+    for line in maze_map:
+        print(line)
+    print("Visited:", robot_x, robot_y)
 
-    dir = get_direction()  # Get sensor readings
+    dir = read_sensors()  # Get sensor readings
+
+    new_direction=setDirection
+
 
     if dir[0] == 0:  # Left open
-        turnLeft()
-        moveForward()
-        update_position("LEFT")
-        search_maze("LEFT")
-        backtrack("LEFT")  # 🔥 Use proper backtracking
+        print("Left open")
+        new_direction = (setDirection - 1) % 4
+        temp = update_position(new_direction,robot_x,robot_y)
+        if (temp):
+            turnLeft()
+            setDirection=new_direction
+            moveForward()
+            search_maze(temp[0],temp[1],new_direction,"LEFT")
 
-    if dir[0] == 1 and dir[1] == 0:  # Forward open
-        moveForward()
-        update_position("UP")
-        search_maze("UP")
-        backtrack("UP")  # 🔥 Use proper backtracking
+    if dir[1] == 0:  # Forward open
+        print("Forward open")
+        new_direction = setDirection
+        temp = update_position(new_direction,robot_x,robot_y)
+        if (temp):
+            moveForward()
+            search_maze(temp[0],temp[1],new_direction,"UP")
 
-    if dir[0] == 1 and dir[1] == 1 and dir[2] == 0:  # Right open
-        turnRight()
-        moveForward()
-        update_position("RIGHT")
-        search_maze("RIGHT")
-        backtrack("RIGHT")  # 🔥 Use proper backtracking
+    if dir[2] == 0:  # Right open
+        print("Right open")
+        new_direction = (setDirection + 1) % 4
+        temp = update_position(new_direction,robot_x,robot_y)
+        if (temp):
+            turnRight()
+            setDirection=new_direction
+            moveForward()
+            search_maze(temp[0],temp[1],new_direction,"RIGHT")
 
+    backtrack(previous_direction)  # Backtrack if no movement possible
 
-# Start the search
-
-search_maze()
+moveForward()
+search_maze(robot_x=19,robot_y=10,setDirection=0)
