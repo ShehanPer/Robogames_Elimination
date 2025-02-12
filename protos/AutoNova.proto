@@ -2,6 +2,7 @@
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puckDistanceSensor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/nvidia/jetbot/protos/JetBotRaspberryPiCamera.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/mir/mir100/protos/Mir100UltrasonicSensor.proto"
 
 PROTO AutoNova [
   field SFVec3f            translation                  0 0 0
@@ -14,6 +15,20 @@ Robot {
   translation IS translation
   rotation IS rotation
   children [
+    Mir100UltrasonicSensor {
+      translation 0 -0.073 0.009
+      rotation 0 0 1 -1.5708
+      name "ps0"
+    }
+    Mir100UltrasonicSensor {
+      translation 0 0.073 0.009
+      rotation 0 0 1 1.5708
+      name "ps4"
+    }
+    Mir100UltrasonicSensor {
+      translation 0.073 0 0.009
+      name "ps2"
+    }
     Gyro {
       name "gyroScope"
     }
@@ -24,7 +39,7 @@ Robot {
       attenuation 0 0 0.4
       beamWidth 0.7
       direction 1 0 -0.4
-      intensity 0.6
+      intensity 0.5
     }
     JetBotRaspberryPiCamera {
       translation 0.075 0 0.037
@@ -48,32 +63,18 @@ Robot {
       name "ps5"
     }
     E-puckDistanceSensor {
-      translation 0 -0.085 0.025
-      rotation -0.5773519358536056 0.5773509358537166 -0.5773479358540499 2.09439
-      name "ps4"
-    }
-    E-puckDistanceSensor {
       translation 0.060104 -0.060104 0.025
       rotation -0.7745983069369637 0.44721317720959824 -0.44721117720880577 1.82347
       name "ps3"
-    }
-    E-puckDistanceSensor {
-      translation 0.085 0 0.025
-      rotation -0.9999999999931786 -1.2753299999913004e-06 3.4664999999763536e-06 1.57079
-      name "ps2"
     }
     E-puckDistanceSensor {
       translation 0.060104 0.060104 0.025
       rotation -0.8628548176054536 -0.35740792444933384 0.3574089244491224 1.71777
       name "ps1"
     }
-    E-puckDistanceSensor {
-      translation 0 0.085 0.025
-      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
-      name "ps0"
-    }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position -4.6195554642942664e-08
         axis 0 1 0
         anchor 0 0.06 0.01
       }
@@ -86,8 +87,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0 0.06 0.01
-        rotation 1 0 0 1.5708
+        translation -4.327538327686398e-12 0.060000000000390775 0.01000370963460246
+        rotation 0.9999999999999996 -2.3159492593885128e-08 2.315957765244702e-08 1.5707999999974502
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -108,6 +109,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
+        position -4.640638506892887e-08
         axis 0 1 0
         anchor 0 -0.06 0.01
       }
@@ -120,8 +122,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 0 -0.06 0.01
-        rotation 1 0 0 1.5708
+        translation -4.306333067916057e-12 -0.0599999999996092 0.010003710124827356
+        rotation 0.9999999999999996 -2.3265287586129272e-08 2.3265373035171058e-08 1.5707999999974502
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -177,12 +179,12 @@ Robot {
       }
     }
   ]
-  name IS name
+  name "AutoNova"
   model "v1"
   boundingObject USE Body
   physics Physics {
   }
-  controller IS controller
+  controller "my_controller"
   battery [
     0
   ]
