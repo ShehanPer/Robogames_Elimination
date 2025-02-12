@@ -14,6 +14,11 @@ Robot {
   translation IS translation
   rotation IS rotation
   children [
+    Gyro {
+    }
+    InertialUnit {
+      name "Inertial Unit"
+    }
     SpotLight {
       attenuation 0.01 0.01 0.01
       beamWidth 0.7
@@ -68,7 +73,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 414.18986041997306
+        position 504.9106569369632
         axis 0 1 0
         anchor 0 0.06 0.01
       }
@@ -81,8 +86,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -1.3774593935158565e-06 0.05999825383355442 0.010001748840475435
-        rotation -0.9404713027642404 0.24032614638576666 -0.24032701063405146 4.6510496975218
+        translation 1.9338509282333407e-06 0.05999825383355442 0.009998897249812209
+        rotation -0.31797707160118494 -0.6704055889468324 0.6704080311607145 3.757324258112986
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -103,7 +108,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 414.18986043144366
+        position 504.9106569630574
         axis 0 1 0
         anchor 0 -0.06 0.01
       }
@@ -116,8 +121,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -1.377435366519622e-06 -0.06000174616681303 0.010001748841151509
-        rotation 0.09909718121866153 0.70362492927756 -0.7036275346898134 2.9440440204286
+        translation 1.9338289015999205e-06 -0.06000174616681303 0.009998897240125192
+        rotation -0.8985100660400452 0.31038599932717253 -0.31038716572433506 4.605571623031564
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -172,7 +177,7 @@ Robot {
   boundingObject USE Body
   physics Physics {
   }
-  controller IS controller
+  controller "my_controller"
   battery [
     0
   ]
