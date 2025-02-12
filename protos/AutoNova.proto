@@ -15,6 +15,10 @@ Robot {
   translation IS translation
   rotation IS rotation
   children [
+    GPS {
+      name "GPS"
+      accuracy 0.001
+    }
     Mir100UltrasonicSensor {
       translation 0 -0.073 0.009
       rotation 0 0 1 -1.5708
@@ -39,7 +43,7 @@ Robot {
       attenuation 0 0 0.4
       beamWidth 0.7
       direction 1 0 -0.4
-      intensity 0.5
+      intensity 0
     }
     JetBotRaspberryPiCamera {
       translation 0.075 0 0.037
@@ -74,7 +78,6 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -4.6195554642942664e-08
         axis 0 1 0
         anchor 0 0.06 0.01
       }
@@ -87,8 +90,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -4.327538327686398e-12 0.060000000000390775 0.01000370963460246
-        rotation 0.9999999999999996 -2.3159492593885128e-08 2.315957765244702e-08 1.5707999999974502
+        translation 0 0.06 0.01
+        rotation 1 -6.180011507259454e-11 6.180033097574564e-11 1.5707999999974487
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -109,7 +112,6 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position -4.640638506892887e-08
         axis 0 1 0
         anchor 0 -0.06 0.01
       }
@@ -122,8 +124,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation -4.306333067916057e-12 -0.0599999999996092 0.010003710124827356
-        rotation 0.9999999999999996 -2.3265287586129272e-08 2.3265373035171058e-08 1.5707999999974502
+        translation 0 -0.06 0.01
+        rotation 1 -6.21802815342693e-11 6.21805007065936e-11 1.5707999999974478
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -184,7 +186,7 @@ Robot {
   boundingObject USE Body
   physics Physics {
   }
-  controller "my_controller"
+  controller IS controller
   battery [
     0
   ]
