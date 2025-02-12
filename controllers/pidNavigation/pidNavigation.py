@@ -5,7 +5,7 @@ import math
 import cv2
 import numpy as np
 
-global dir
+
 
 # Create the Robot instance
 robot = Robot()
@@ -81,11 +81,12 @@ def moveForward():
 
     LstartVal = L_encoder.getValue()  # Start at 0 since we're subtracting the offsets
     start_time = robot.getTime()
-
+    
     while robot.step(timestep) != -1:
-        left_read=IR_sensors[0].getValue()
-        right_read=IR_sensors[2].getValue()
-        # Get encoder values and subtract offset
+        if axis=='X':
+            left_read=IR_sensors[0].getValue()
+            right_read=IR_sensors[2].getValue()
+            # Get encoder values and subtract offset
         if (left_read > 900):
             error = 900 - left_read 
     
