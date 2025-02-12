@@ -4,13 +4,13 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
-EXTERNPROTO "../protos/E-puck.proto"
+EXTERNPROTO "../protos/AutoNova.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation 0.42509820912859286 0.4940717032767724 -0.7584092988728791 1.929109873627698
-  position -0.3817524576215441 4.3332807077139215 5.683728330896911
+  orientation -0.646700913997217 0.43483029255643924 0.6266582358115511 2.178951782738183
+  position -2.4898893258114705 -2.4772453329752313 2.678371416430007
 }
 TexturedBackground {
 }
@@ -39,21 +39,6 @@ RectangleArena {
       ]
     }
   }
-}
-E-puck {
-  hidden position_0_0 105.64947020279233
-  hidden position_0_1 119.20084353661404
-  hidden linearVelocity_0 1.0640485571999116e-13 -2.2140905789914495e-13 -7.058057841883662e-15
-  hidden angularVelocity_0 1.4427350171193126e-11 6.611013155225001e-12 1.1013626284836604e-07
-  hidden rotation_1 0 1 0 5.118505287918946
-  hidden linearVelocity_1 1.2365800167750416e-09 -2.6333217844135093e-09 2.220445866951554e-16
-  hidden angularVelocity_1 1.3286565954813577e-07 6.239229557646126e-08 1.101362616830851e-07
-  hidden rotation_2 0 0.9999999999999999 0 6.103508007381488
-  hidden linearVelocity_2 -1.2363052609757323e-09 2.632733329713487e-09 -1.199040439904475e-15
-  hidden angularVelocity_2 -1.328361416456615e-07 -6.23787451696957e-08 1.1013626355225867e-07
-  translation -1.3330773550466553 1.201421539632367 -0.004350061995788343
-  rotation 5.355932621518799e-10 8.418792429821617e-10 1 2.0098200037398457
-  controller "my_controller"
 }
 Wall {
   translation -2.65 0.07 0
@@ -159,4 +144,9 @@ Pose {
       }
     }
   ]
+}
+AutoNova {
+  translation -2.45219 -3.01598 0.0156035
+  rotation -8.068488361459148e-05 2.4569266977327516e-06 -0.9999999967419566 0.062165307099866916
+  controller "my_controller"
 }

@@ -1,0 +1,183 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puckDistanceSensor.proto"
+
+PROTO AutoNova [
+  field SFVec3f            translation                  0 0 0
+  field SFRotation         rotation                     0 0 1 0
+  field SFString           name                         "AutoNova"
+  field SFString           controller                   "<generic>"
+]
+{
+Robot {
+  translation IS translation
+  rotation IS rotation
+  children [
+    JetBotRaspberryPiCamera {
+      translation 0.075 0 0.037
+      fieldOfView 1
+      width 360
+      height 360
+    }
+    InertialUnit{ 
+      name "inertial_unit"
+    }
+    E-puckDistanceSensor {
+      translation -0.060104 0.060104 0.025
+      rotation 0.28108214909598983 0.6785993599532862 -0.6785983599527559 -2.593565307179586
+      name "ps7"
+    }
+    E-puckDistanceSensor {
+      translation -0.085 0 0.025
+      rotation -2.4545692404262723e-06 0.7071077811834008 -0.7071057811840198 3.14159
+      name "ps6"
+    }
+    E-puckDistanceSensor {
+      translation -0.060104 -0.060104 0.025
+      rotation 0.28108694479748086 -0.6785988667303209 0.6785968667307137 -2.593555307179586
+      name "ps5"
+    }
+    E-puckDistanceSensor {
+      translation 0 -0.085 0.025
+      rotation -0.5773519358536056 0.5773509358537166 -0.5773479358540499 2.09439
+      name "ps4"
+    }
+    E-puckDistanceSensor {
+      translation 0.060104 -0.060104 0.025
+      rotation -0.7745983069369637 0.44721317720959824 -0.44721117720880577 1.82347
+      name "ps3"
+    }
+    E-puckDistanceSensor {
+      translation 0.085 0 0.025
+      rotation -0.9999999999931786 -1.2753299999913004e-06 3.4664999999763536e-06 1.57079
+      name "ps2"
+    }
+    E-puckDistanceSensor {
+      translation 0.060104 0.060104 0.025
+      rotation -0.8628548176054536 -0.35740792444933384 0.3574089244491224 1.71777
+      name "ps1"
+    }
+    E-puckDistanceSensor {
+      translation 0 0.085 0.025
+      rotation 0.5773476025217157 0.5773516025189619 -0.5773516025189619 -2.094395307179586
+      name "ps0"
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 290.41197221395794
+        axis 0 1 0
+        anchor 0 0.06 0.01
+      }
+      device [
+        PositionSensor {
+          name "left encoder"
+        }
+        RotationalMotor {
+          name "left motor"
+        }
+      ]
+      endPoint Solid {
+        translation 2.089567393550692e-06 0.05999825383355442 0.010000767818661606
+        rotation -0.6485376887851393 -0.5382363565539372 0.5382383214792242 4.292282433772199
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 1
+              metalness 0
+            }
+            geometry DEF wheel_geo Cylinder {
+              height 0.009
+              radius 0.03
+            }
+          }
+        ]
+        name "LeftWheel"
+        boundingObject USE wheel
+        physics Physics {
+        }
+        linearVelocity 0.18839599182767014 -3.3849454297311876e-06 -6.388137833217322e-06
+        angularVelocity 0.00022568706556526602 6.27999938388802 -2.984287402080999e-06
+      }
+    }
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        position 290.4119722252072
+        axis 0 1 0
+        anchor 0 -0.06 0.01
+      }
+      device [
+        PositionSensor {
+          name "right encoder"
+        }
+        RotationalMotor {
+          name "right motor"
+        }
+      ]
+      endPoint Solid {
+        translation 2.0895605917315592e-06 -0.06000174616681303 0.010000767795607976
+        rotation -0.5908935177419634 0.570457021532425 -0.5704591460173837 4.208982720836799
+        children [
+          DEF wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0 1 1
+              metalness 0
+            }
+            geometry DEF wheel_geo Cylinder {
+              height 0.009
+              radius 0.03
+            }
+          }
+        ]
+        name "RightWheel"
+        boundingObject USE wheel
+        physics DEF physics_wh Physics {
+        }
+        linearVelocity 0.1883959924580306 -3.3849597696079633e-06 -6.384662334291968e-06
+        angularVelocity 0.00022568790185847925 6.279999383925778 -2.984104323942557e-06
+      }
+    }
+    DEF Body Shape {
+      appearance PBRAppearance {
+        metalness 0
+      }
+      geometry Box {
+        size 0.1 0.1 0.0399
+      }
+    }
+    Solid {
+      translation -0.0859 -0.0853 0.019987
+      children [
+        Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
+          geometry Mesh {
+            url [
+              "../RoboParts/topCylinder.STL"
+            ]
+            name "top cylinder"
+          }
+        }
+      ]
+      name "top"
+      boundingObject Mesh {
+        url [
+          "../RoboParts/topCylinder.STL"
+        ]
+      }
+    }
+  ]
+  name "AutoNova"
+  model "v1"
+  boundingObject USE Body
+  physics Physics {
+  }
+  controller "my_controller"
+  battery [
+    0
+  ]
+  linearVelocity 0.18838907840825822 -3.3850859598824944e-06 6.387088781344203e-06
+  angularVelocity -2.9371623535247196e-08 -3.726535988699397e-07 1.2964697001565868e-08
+}
+}
+
