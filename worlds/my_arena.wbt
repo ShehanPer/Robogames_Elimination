@@ -10,7 +10,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position -0.19712493048122376 -0.14988250576061313 8.655497941268049
+  position 0.007792807001914823 0.002491671326606038 10.107780066451188
 }
 TexturedBackground {
 }
@@ -41,34 +41,34 @@ RectangleArena {
   }
 }
 Wall {
-  translation -2.65 0.07 0
+  translation -2.65 -0.13 0
   size 0.01 5.04 0.1
 }
 Wall {
-  translation 2.4 0.06 0
+  translation 2.4 -0.14 0
   name "wall(1)"
   size 0.01 5.04 0.1
 }
 Wall {
-  translation -0.130008 2.59 0
+  translation -0.130008 2.39 0
   rotation 0 0 1 1.5707996938995747
   name "wall(2)"
   size 0.01 5.04 0.1
 }
 Wall {
-  translation -1.39998 -2.46 0
+  translation -1.39998 -2.66 0
   rotation 0 0 1 1.5707996938995747
   name "wall(3)"
   size 0.01 2.5 0.1
 }
 Wall {
-  translation 1.25002 -2.46 0
+  translation 1.25002 -2.66 0
   rotation 0 0 1 1.5707996938995747
   name "wall(4)"
   size 0.01 2.26 0.1
 }
 Pose {
-  translation -0.5 2.6 0
+  translation -0.5 2.4 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -94,7 +94,7 @@ Pose {
   ]
 }
 Pose {
-  translation -0.5 2.6 0
+  translation -0.5 2.4 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -120,7 +120,7 @@ Pose {
   ]
 }
 Pose {
-  translation -0.5 2.6 0
+  translation -0.5 2.4 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -146,7 +146,13 @@ Pose {
   ]
 }
 AutoNova {
-  translation -0.0171692 -2.60126 0.0155997
-  rotation 1.035985937960824e-06 -9.107680201111723e-07 0.9999999999990486 1.5707996991351574
+  hidden position_0_0 50.926616165054455
+  hidden position_0_1 50.92661370775039
+  hidden translation_18 2.2777571703345283e-06 0.060000000000390775 0.010002928004637424
+  hidden rotation_18 0.8996551846826495 0.30872305427821833 -0.3087241882826095 1.676347179510819
+  hidden translation_19 2.278050995758962e-06 -0.0599999999996092 0.01000292839715464
+  hidden rotation_19 0.8996558710037739 0.30872205426976856 -0.30872318827048717 1.6763464208853973
+  translation 0 0 0.0155932
+  rotation -4.973944110936098e-05 5.008310097850355e-05 0.9999999975088355 1.5766499263530742
   controller "my_controller"
 }
