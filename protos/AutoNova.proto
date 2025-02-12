@@ -15,12 +15,13 @@ Robot {
   rotation IS rotation
   children [
     Gyro {
+      name "gyroScope"
     }
     InertialUnit {
       name "Inertial Unit"
     }
     SpotLight {
-      attenuation 0.01 0.01 0.01
+      attenuation 0 0 0.4
       beamWidth 0.7
       direction 1 0 -0.4
       intensity 0.6
@@ -73,7 +74,6 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 504.9106569369632
         axis 0 1 0
         anchor 0 0.06 0.01
       }
@@ -86,8 +86,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 1.9338509282333407e-06 0.05999825383355442 0.009998897249812209
-        rotation -0.31797707160118494 -0.6704055889468324 0.6704080311607145 3.757324258112986
+        translation 0 0.06 0.01
+        rotation 1 0 0 1.5708
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -108,7 +108,6 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 504.9106569630574
         axis 0 1 0
         anchor 0 -0.06 0.01
       }
@@ -121,8 +120,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 1.9338289015999205e-06 -0.06000174616681303 0.009998897240125192
-        rotation -0.8985100660400452 0.31038599932717253 -0.31038716572433506 4.605571623031564
+        translation 0 -0.06 0.01
+        rotation 1 0 0 1.5708
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -150,7 +149,7 @@ Robot {
       }
     }
     Solid {
-      translation -0.0859 -0.0853 0.019987
+      translation -0.0859 -0.0853 0.02
       children [
         Shape {
           appearance PBRAppearance {
@@ -170,14 +169,20 @@ Robot {
           "../RoboParts/topCylinder.STL"
         ]
       }
+      physics Physics {
+        density 0.1
+        centerOfMass [
+          0 0 0
+        ]
+      }
     }
   ]
-  name "AutoNova"
+  name IS name
   model "v1"
   boundingObject USE Body
   physics Physics {
   }
-  controller "my_controller"
+  controller IS controller
   battery [
     0
   ]
