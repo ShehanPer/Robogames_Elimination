@@ -10,7 +10,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position -0.19712493048122376 -0.14988250576061313 8.655497941268049
+  position 0.04774148984234887 -2.744077908430688 1.9912677093439313
 }
 TexturedBackground {
 }
@@ -41,34 +41,34 @@ RectangleArena {
   }
 }
 Wall {
-  translation -2.65 0.07 0
+  translation -2.65 -0.13 0
   size 0.01 5.04 0.1
 }
 Wall {
-  translation 2.4 0.06 0
+  translation 2.4 -0.14 0
   name "wall(1)"
   size 0.01 5.04 0.1
 }
 Wall {
-  translation -0.130008 2.59 0
+  translation -0.130008 2.39 0
   rotation 0 0 1 1.5707996938995747
   name "wall(2)"
   size 0.01 5.04 0.1
 }
 Wall {
-  translation -1.39998 -2.46 0
+  translation -1.39998 -2.66 0
   rotation 0 0 1 1.5707996938995747
   name "wall(3)"
   size 0.01 2.5 0.1
 }
 Wall {
-  translation 1.25002 -2.46 0
+  translation 1.25002 -2.66 0
   rotation 0 0 1 1.5707996938995747
   name "wall(4)"
   size 0.01 2.26 0.1
 }
 Pose {
-  translation -0.5 2.6 0
+  translation -0.5 2.4 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -94,7 +94,7 @@ Pose {
   ]
 }
 Pose {
-  translation -0.5 2.6 0
+  translation -0.5 2.4 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -120,7 +120,7 @@ Pose {
   ]
 }
 Pose {
-  translation -0.5 2.6 0
+  translation -0.5 2.4 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -146,7 +146,7 @@ Pose {
   ]
 }
 AutoNova {
-  translation -0.0171692 -2.60126 0.0155997
-  rotation 1.035985937960824e-06 -9.107680201111723e-07 0.9999999999990486 1.5707996991351574
+  translation -0.0137267 -2.78016 0.0158712
+  rotation -4.973944110936098e-05 5.008310097850355e-05 0.9999999975088355 1.5766499263530742
   controller "my_controller"
 }

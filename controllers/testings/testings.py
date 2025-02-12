@@ -119,7 +119,7 @@ def moveForward():
         #print('gyro',gyro.getValues())
         if(0.25<=distance_T<0.26):
             stoping =True
-            print("stop forward")
+            print("stoping")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
             robot.step(timestep*10)
@@ -185,7 +185,9 @@ def moveBack():
     #move 0.25 meter backward with pid
     pass
 
-
+def get_direction():
+    
+    pass
 def get_direction():
     dir = [1 if IR_sensors[i].getValue() > 800 else 0 for i in range(3)]
     return dir
@@ -198,27 +200,24 @@ maze_map = [[0] * 20 for _ in range(20)]
 robot_x, robot_y = 19, 10  # Assuming the robot starts at (0, 0)
 
 def backtrack(previous_direction):
-    """Turn the robot back to the original direction and move forward"""
+    """Turn the robot back to the original direction after backtracking"""
     if previous_direction == "LEFT":
-        print("Backtracking LEFT")
-        turnRight()  
-        moveForward()  # Move back to the previous position
+        turnRight()  # Face back to original direction
     elif previous_direction == "RIGHT":
-        print("Backtracking RIGHT")
-        turnLeft()
-        moveForward()
+        turnLeft()  # Face back to original direction
     elif previous_direction == "UP":
-        print("Backtracking UP")
         turnReverse()  # 180° turn to go back
-        moveForward()
     elif previous_direction == "DOWN":
-        print("Backtracking DOWN")
-        turnReverse()
-        moveForward()
+        turnReverse()  # 180° turn to go back
 
 # Directions mapping (dx, dy)
-DIRECTION_MAP = [(-1,0),(0,1),(1,0),(0,-1)]
-    
+DIRECTION_MAP = {
+    "UP": (-1, 0),
+    "DOWN": (1, 0),
+    "LEFT": (0, -1),
+    "RIGHT": (0, 1),
+}
+
 def update_position(direction):
     """Update (x, y) based on movement direction"""
     global robot_x, robot_y
@@ -227,57 +226,43 @@ def update_position(direction):
     robot_x += dx
     robot_y += dy
 
-setDirection=0
-
 def search_maze(previous_direction=None):
     """Recursive maze search with proper backtracking"""
-    global robot_x, robot_y, maze_map,setDirection
-
+    global robot_x, robot_y, maze_map
+    for line in maze_map:
+        print(line)
     if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
-        print("Out of bounds")
         return  # Out of bounds
 
     if maze_map[robot_x][robot_y] == 1:
-        print("Already visited")
         return  # Already visited
 
     # Mark as visited
     maze_map[robot_x][robot_y] = 1
-    for line in maze_map:
-        print(line)
-    print("Visited:", robot_x, robot_y)
 
     dir = get_direction()  # Get sensor readings
 
-    moved = False  # Track if movement happened
-
-    if dir[1] == 0:  # Forward open
-        print("Forward open")
-        moveForward()
-        update_position(setDirection)
-        search_maze("UP")
-        moved = True  # Movement happened
-
     if dir[0] == 0:  # Left open
-        print("Left open")
         turnLeft()
-        setDirection=(setDirection-1)%4
         moveForward()
-        update_position(setDirection)
+        update_position("LEFT")
         search_maze("LEFT")
-        moved = True  # Movement happened
+        backtrack("LEFT")  # 🔥 Use proper backtracking
 
-    if dir[2] == 0:  # Right open
-        print("Right open")
-        turnRight()
-        setDirection=(setDirection+1)%4
+    if dir[0] == 1 and dir[1] == 0:  # Forward open
         moveForward()
-        update_position(setDirection)
-        search_maze("RIGHT")
-        moved = True  # Movement happened
+        update_position("UP")
+        search_maze("UP")
+        backtrack("UP")  # 🔥 Use proper backtracking
 
-    # 🔥 Backtrack **only if no movement happened**
-    if not moved and previous_direction:
-        backtrack(previous_direction)
-moveForward()
+    if dir[0] == 1 and dir[1] == 1 and dir[2] == 0:  # Right open
+        turnRight()
+        moveForward()
+        update_position("RIGHT")
+        search_maze("RIGHT")
+        backtrack("RIGHT")  # 🔥 Use proper backtracking
+
+
+# Start the search
+
 search_maze()
