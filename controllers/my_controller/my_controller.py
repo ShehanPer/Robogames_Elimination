@@ -22,7 +22,7 @@ def get_device(device_name):
 
 
 # Get ultrasonic sensors
-us_names = ['ps0', 'ps1', 'ps2']  # Front, Left, Right
+us_names = ['ps0', 'ps2', 'ps4']  # Front, Left, Right
 IR_sensors = [get_device(name) for name in us_names]
 
 L_encoder = get_device('left encoder')
@@ -185,10 +185,37 @@ def moveBack():
     #move 0.25 meter backward with pid
     pass
 
+def get_direction():
+    
+    pass
+def get_direction():
+    dir = [1 if IR_sensors[i].getValue() > 80 else 0 for i in range(3)]
+    return dir
+maze_array = np.zeros((20, 20))
+
 # Main loop
 def search_maze(direction):
-    
-   
-    
+    dir = get_direction()
 
+    if direction == -1:
+        turnLeft()
+        moveForward()
+    if direction == 0:
+        moveForward()
+    if direction == 1:
+        turnRight()
+        moveForward()
+    while robot.step(timestep) != -1:
+        dir = get_direction()
+        if dir[0] == 0:
+            search_maze(-1)
+        elif (dir[0]==1 and dir[1] == 0):
+            search_maze(0)
+        elif dir[0]==1 and dir[1] == 1 and dir[2] == 0:
+            search_maze(1)
+        else:
+            turnReverse()
 
+moveForward()
+search_maze
+    
