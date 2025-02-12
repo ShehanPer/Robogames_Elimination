@@ -1,6 +1,7 @@
 #VRML_SIM R2023b utf8
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/gctronic/e-puck/protos/E-puckDistanceSensor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/robots/nvidia/jetbot/protos/JetBotRaspberryPiCamera.proto"
 
 PROTO AutoNova [
   field SFVec3f            translation                  0 0 0
@@ -13,14 +14,22 @@ Robot {
   translation IS translation
   rotation IS rotation
   children [
+    Gyro {
+    }
+    InertialUnit {
+      name "Inertial Unit"
+    }
+    SpotLight {
+      attenuation 0.01 0.01 0.01
+      beamWidth 0.7
+      direction 1 0 -0.4
+      intensity 0.6
+    }
     JetBotRaspberryPiCamera {
       translation 0.075 0 0.037
       fieldOfView 1
       width 360
       height 360
-    }
-    InertialUnit{ 
-      name "inertial_unit"
     }
     E-puckDistanceSensor {
       translation -0.060104 0.060104 0.025
@@ -64,7 +73,7 @@ Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 290.41197221395794
+        position 504.9106569369632
         axis 0 1 0
         anchor 0 0.06 0.01
       }
@@ -77,8 +86,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 2.089567393550692e-06 0.05999825383355442 0.010000767818661606
-        rotation -0.6485376887851393 -0.5382363565539372 0.5382383214792242 4.292282433772199
+        translation 1.9338509282333407e-06 0.05999825383355442 0.009998897249812209
+        rotation -0.31797707160118494 -0.6704055889468324 0.6704080311607145 3.757324258112986
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -95,13 +104,11 @@ Robot {
         boundingObject USE wheel
         physics Physics {
         }
-        linearVelocity 0.18839599182767014 -3.3849454297311876e-06 -6.388137833217322e-06
-        angularVelocity 0.00022568706556526602 6.27999938388802 -2.984287402080999e-06
       }
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 290.4119722252072
+        position 504.9106569630574
         axis 0 1 0
         anchor 0 -0.06 0.01
       }
@@ -114,8 +121,8 @@ Robot {
         }
       ]
       endPoint Solid {
-        translation 2.0895605917315592e-06 -0.06000174616681303 0.010000767795607976
-        rotation -0.5908935177419634 0.570457021532425 -0.5704591460173837 4.208982720836799
+        translation 1.9338289015999205e-06 -0.06000174616681303 0.009998897240125192
+        rotation -0.8985100660400452 0.31038599932717253 -0.31038716572433506 4.605571623031564
         children [
           DEF wheel Shape {
             appearance PBRAppearance {
@@ -132,8 +139,6 @@ Robot {
         boundingObject USE wheel
         physics DEF physics_wh Physics {
         }
-        linearVelocity 0.1883959924580306 -3.3849597696079633e-06 -6.384662334291968e-06
-        angularVelocity 0.00022568790185847925 6.279999383925778 -2.984104323942557e-06
       }
     }
     DEF Body Shape {
@@ -176,8 +181,6 @@ Robot {
   battery [
     0
   ]
-  linearVelocity 0.18838907840825822 -3.3850859598824944e-06 6.387088781344203e-06
-  angularVelocity -2.9371623535247196e-08 -3.726535988699397e-07 1.2964697001565868e-08
 }
 }
 
