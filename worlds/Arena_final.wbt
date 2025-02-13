@@ -12,8 +12,8 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation -0.5667350946593 0.5610944184573946 0.6033111850922975 2.0646476030436243
-  position 0.8865154727298648 -2.0563272707445264 10.101659149862336
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 0.03696539269642071 -2.0583478266702815 7.962200510179185
 }
 TexturedBackground {
 }
@@ -29,7 +29,8 @@ Wall {
 RectangleArena {
   floorSize 7 7
   floorAppearance Parquetry {
-    type "light strip"
+    type "dark strip"
+    colorOverride 0 0 0
   }
 }
 Wall {
@@ -649,12 +650,6 @@ Wall {
   rotation 0 0 1 1.5708
   name "108"
   size 0.01 0.25 0.1
-  appearance Roughcast {
-    colorOverride 1 1 0.5
-    textureTransform TextureTransform {
-      scale 2.4 1
-    }
-  }
 }
 Wall {
   translation -0.875 -0.5 0
@@ -1583,7 +1578,7 @@ Wall {
   size 0.01 5 0.1
 }
 AutoNova {
-  translation 0.125 -2.625 0.0199283
-  rotation 0 0 1 1.5708
+  translation 0.125 -2.625 0.0225466
+  rotation -0.0009802998226117916 0.0009798453747976831 0.9999990394571883 1.5713404104015822
   controller "my_controller"
 }

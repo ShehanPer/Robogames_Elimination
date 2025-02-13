@@ -167,8 +167,8 @@ def moveForward():
         current_gpsVal = gps_device.getValues()
         # if adj_pos:
         #     adjest_positionRotation()
-        L_motor.setVelocity(10)
-        R_motor.setVelocity(10)
+        L_motor.setVelocity(8)
+        R_motor.setVelocity(8)
 
         # Compute traveled distance
         distance_x,distance_y = abs(current_gpsVal[0]-start_gpsVal[0])*100,abs(current_gpsVal[1]-start_gpsVal[1])*100
@@ -190,8 +190,8 @@ def moveBackward():
     while robot.step(timestep) != -1:
         # Get encoder values and subtract offset
         current_gpsVal = gps_device.getValues()
-        L_motor.setVelocity(-10)
-        R_motor.setVelocity(-10)
+        L_motor.setVelocity(-8)
+        R_motor.setVelocity(-8)
 
         # Compute traveled distance
         distance_x,distance_y = abs(current_gpsVal[0]-start_gpsVal[0])*100,abs(current_gpsVal[1]-start_gpsVal[1])*100
