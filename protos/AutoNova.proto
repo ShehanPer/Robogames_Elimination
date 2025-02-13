@@ -17,7 +17,6 @@ Robot {
   children [
     GPS {
       name "GPS"
-      accuracy 0.001
     }
     Mir100UltrasonicSensor {
       translation 0 -0.073 0.009

@@ -9,8 +9,8 @@ EXTERNPROTO "../protos/AutoNova.proto"
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.49090586985942636 0.5212716048753787 0.6980596972238169 1.8657685039933731
-  position 0.9424598794000663 -4.47859300683683 9.997665049152753
+  orientation -0.6870835391554224 -0.029417088185409026 0.7259826755125435 3.2036784619057808
+  position -1.4549021759103342 -2.6919060165471187 8.236686323171673
 }
 TexturedBackground {
 }
@@ -49,25 +49,25 @@ Wall {
   size 0.01 5.04 0.1
 }
 Wall {
-  translation -0.132 2.42 0
+  translation -0.132 2.379 0
   rotation 0 0 1 1.5707996938995747
   name "wall(2)"
   size 0.01 5.04 0.1
 }
 Wall {
-  translation -1.41998 -2.63 0
+  translation -1.41998 -2.64 0
   rotation 0 0 1 1.5707996938995747
   name "wall(3)"
   size 0.01 2.5 0.1
 }
 Wall {
-  translation 1.25002 -2.62 0
+  translation 1.25002 -2.64 0
   rotation 0 0 1 1.5707996938995747
   name "wall(4)"
   size 0.01 2.26 0.1
 }
 Pose {
-  translation -0.518 2.43 0
+  translation -0.518 2.39 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -93,7 +93,7 @@ Pose {
   ]
 }
 Pose {
-  translation -0.518 2.43 0
+  translation -0.518 2.39 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -119,7 +119,7 @@ Pose {
   ]
 }
 Pose {
-  translation -0.518 2.3 0
+  translation -0.518 2.39 0
   rotation 1 0 0 1.5707996938995747
   children [
     Solid {
@@ -145,12 +145,6 @@ Pose {
   ]
 }
 AutoNova {
-  hidden position_0_0 13.562436845372584
-  hidden position_0_1 23.895376689739727
-  hidden translation_19 0 0.06 0.01
-  hidden rotation_19 0.7927203941135862 0.4310411881798463 -0.4310427714843466 1.8010234914825074
-  hidden translation_20 0 -0.06 0.01
-  hidden rotation_20 0.7047041639974599 -0.5016922324412213 0.5016940752617919 1.913843814668497
-  translation 0.5 -2.25 0.0198805
+  translation 0 -2.25 0.0198805
   controller "testings"
 }

@@ -48,6 +48,8 @@ R_motor.setPosition(float('inf'))
 inertial_unit =get_device('Inertial Unit')
 gyro = get_device('gyroScope')
 
+gps=get_device('GPS')
+
 camera=get_device('camera')
 
 # Function to convert ultrasonic readings (depends on the LUT)
@@ -79,57 +81,56 @@ def use_camera(cam):
     img_resize = cv2.resize(img_rgb,(new_width,new_height),interpolation=cv2.INTER_LINEAR)
 
     return img_rgb
-def moveForward():
-    # PID for straight moves
-    global stoping
 
-    stoping = False
+
+
+def moveForward(y,x,direction):
+    # PID for straight moves
+
     robot.step(timestep)
 
-    # Get initial encoder values as offsets
-    L_encoder_offset = L_encoder.getValue()
-    R_encoder_offset = R_encoder.getValue()
-
     kp = 0.2
-    ki = 0.0001
     kd = 0.01
-    integral = 0
+
     derivative = 0
     last_error = 0
 
-    LstartVal = 0  # Start at 0 since we're subtracting the offsets
-    start_time = robot.getTime()
+    x_val=(10-x)*25
+    y_val=(9-y)*25
+    print("X:",x_val,"Y:",y_val)
+
 
     while robot.step(timestep) != -1:
         # Get encoder values and subtract offset
-        L_encoderVal = L_encoder.getValue() - L_encoder_offset
-        R_encoderVal = R_encoder.getValue() - R_encoder_offset
-
-        error = (L_encoderVal - R_encoderVal) * 4
-        integral += error
+        print(gps.getValues())
+        match direction:    #should move to right if error is positive
+            
+            case 0:
+                error = (gps.getValues()[0]*100 - x_val)
+                distance=(y_val - gps.getValues()[1]*100 )
+            case 1:
+                error = (y_val - gps.getValues()[1]*100)
+                distance=(gps.getValues()[0]*100 - x_val)
+                
+            case 2:
+                error = (x_val - gps.getValues()[0]*100)
+                distance=(gps.getValues()[1]*100 - y_val)
+            case 3:
+                error = (gps.getValues()[1]*100 - y_val)
+                distance=(x_val - gps.getValues()[0]*100 )
+            case _:
+                print("Invalid direction")
+                break  
+        print("Distance : ",distance)
         derivative = error - last_error
         last_error = error
-        correction = kp * error + ki * integral + kd * derivative
+        correction = kp * error + kd * derivative
         correction = round(correction, 3)
-        
-        #print("Correction:", correction)
 
-        L_motor.setVelocity(2 - correction)
-        R_motor.setVelocity(2 + correction)
+        L_motor.setVelocity(2 + correction)
+        R_motor.setVelocity(2 - correction)
 
-        # Compute traveled distance
-        LendVal = L_encoderVal  # Since we already subtracted offset
-        distance = (LendVal - LstartVal) * 0.06 * 3.14 / 7
-        distance = round(distance, 3)
-        
-        
-        end_time=robot.getTime()
-        travel_time=end_time-start_time
-        distance_T = 2*0.03*travel_time
-        #print('Distance:', distance_T)
-        #print('gyro',gyro.getValues())
-        if(0.25<=distance_T<0.26):
-            stoping =True
+        if(distance<0.01):
             print("stop forward")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
@@ -300,11 +301,11 @@ def backtrack(previous_direction):
     
 def update_position(direction,robot_x,robot_y):
     """Update (x, y) based on movement direction"""
-
+    print("Direction:", direction , robot_x,robot_y)
     dx, dy = DIRECTION_MAP[direction]
     cell_x = robot_x + dx
     cell_y = robot_y + dy
-
+    print("Cell:", cell_x, cell_y)
     if maze_map[cell_x][cell_y] == 0:
         robot_x = cell_x
         robot_y = cell_y
@@ -325,6 +326,7 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
     maze_map[robot_x][robot_y] = 1
     for line in maze_map:
         print(line)
+
     print("Visited:", robot_x, robot_y)
 
     dir = read_sensors()  # Get sensor readings
@@ -339,15 +341,14 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
         if (temp):
             turnLeft()
             setDirection=new_direction
-            moveForward()
+            moveForward(temp[0],temp[1],new_direction)
             search_maze(temp[0],temp[1],new_direction,"LEFT")
 
     if dir[1] == 0:  # Forward open
         print("Forward open")
-        new_direction = setDirection
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
-            moveForward()
+            moveForward(temp[0],temp[1],new_direction)
             search_maze(temp[0],temp[1],new_direction,"UP")
 
     if dir[2] == 0:  # Right open
@@ -357,10 +358,10 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
         if (temp):
             turnRight()
             setDirection=new_direction
-            moveForward()
+            moveForward(temp[0],temp[1],new_direction)
             search_maze(temp[0],temp[1],new_direction,"RIGHT")
 
     backtrack(previous_direction)  # Backtrack if no movement possible
 
-moveForward()
-search_maze(robot_x=19,robot_y=10,setDirection=0)
+moveForward(19,10,0)
+search_maze(robot_x=19,robot_y=9,setDirection=3)
