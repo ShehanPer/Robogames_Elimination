@@ -1,0 +1,1589 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Roughcast.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "../protos/AutoNova.proto"
+
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.5667350946593 0.5610944184573946 0.6033111850922975 2.0646476030436243
+  position 0.8865154727298648 -2.0563272707445264 10.101659149862336
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+  castShadows FALSE
+}
+Wall {
+  translation 1.875 1.25 0
+  rotation 0 0 1 1.5708
+  name "1"
+  size 0.01 0.25 0.1
+}
+RectangleArena {
+  floorSize 7 7
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+}
+Wall {
+  translation -1.125 -0.74 0
+  rotation 0 0 1 1.5708
+  name "2"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.5 0.625 0
+  name "3"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.5 0.375 0
+  name "4"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.5 -0.125 0
+  name "5"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.76 0.125 0
+  name "6"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.01 0.125 0
+  name "7"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.76 0.125 0
+  name "8"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1 -0.375 0
+  name "9"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.25 -0.125 0
+  name "10"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.76 -0.125 0
+  name "11"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2 0.5 0
+  name "12"
+  size 0.01 1 0.1
+}
+Wall {
+  translation -1.75 0.75 0
+  name "13"
+  size 0.01 1 0.1
+}
+Wall {
+  translation -0.5 2 0
+  rotation 0 0 1 1.5707996938995747
+  name "14"
+  size 0.01 1 0.1
+}
+Wall {
+  translation -1.25 -2.5 0
+  rotation -9.58979e-09 9.58976e-09 -1 -1.5707953071795862
+  name "15"
+  size 0.01 2.5 0.1
+}
+Wall {
+  translation 1.375 -2.5 0
+  rotation -9.58979e-09 9.58976e-09 -1 -1.5707953071795862
+  name "16"
+  size 0.01 2.25 0.1
+}
+Wall {
+  translation 0.5 -0.75 0
+  rotation 0 0 1 1.5708
+  name "17"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.75 -1 0
+  rotation 0 0 1 1.5708
+  name "18"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.25 -1 0
+  rotation 0 0 1 1.5708
+  name "19"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.75 -2.25 0
+  rotation 0 0 1 1.5708
+  name "20"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.25 -1.75 0
+  rotation 0 0 1 1.5708
+  name "21"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -0.75 -2 0
+  rotation 0 0 1 1.5708
+  name "22"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0 0.5 0
+  rotation 0 0 1 1.5708
+  name "23"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.99 2.25 0
+  rotation 0 0 1 1.5708
+  name "24"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -2.01 2.25 0
+  rotation 0 0 1 1.5708
+  name "25"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.76 2 0
+  rotation 0 0 1 1.5708
+  name "26"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.26 1.74 0
+  rotation 0 0 1 1.5708
+  name "27"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.5 0.25 0
+  rotation 0 0 1 1.5708
+  name "28"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -2.26 0.99 0
+  rotation 0 0 1 1.5708
+  name "29"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 2e-06 -2.25 0
+  rotation 0 0 1 1.5708
+  name "30"
+  size 0.01 1 0.1
+}
+Wall {
+  translation 0.25 -2.375 0
+  name "31"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.25 -2.375 0
+  name "32"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.5 -2.125 0
+  name "33"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.25 -2.125 0
+  name "34"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.25 -1.375 0
+  name "35"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.25 -0.875 0
+  name "36"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.5 -0.875 0
+  name "37"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.25 -0.875 0
+  name "38"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2 -0.625 0
+  name "39"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.5 -0.625 0
+  name "40"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.25 -0.625 0
+  name "41"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 2.25 0.125 0
+  name "42"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.75 0.125 0
+  name "43"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.5 -1.375 0
+  name "44"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.75 -0.875 0
+  name "45"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.5 -0.625 0
+  name "46"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.25 -1.875 0
+  name "47"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.5 -0.75 0
+  name "48"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.75 -1.875 0
+  name "49"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1 -1.875 0
+  name "50"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation 1 -1.875 0
+  name "51"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation 2 0.125 0
+  name "52"
+  size 0.01 0.75 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.25 1.625 0
+  name "53"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation 0 1.375 0
+  name "54"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.75 1.375 0
+  name "55"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation 0.25 0.625 0
+  name "56"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation 2 -1.875 0
+  name "57"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1.25 -2.25 0
+  name "58"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -0.75 -2.25 0
+  name "59"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -0.75 -1.5 0
+  name "60"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -2.25 0.5 0
+  name "61"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.75 1.5 0
+  name "62"
+  size 0.01 0.5 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.5 1.75 0
+  name "63"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -0.25 1.5 0
+  name "64"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -0.25 0.5 0
+  name "65"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.25 0.5 0
+  name "66"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.5 0.75 0
+  name "67"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.24 2 0
+  name "68"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -2.24 1.75 0
+  name "69"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -0.25 -2 0
+  name "70"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 1.75 -1.75 0
+  name "71"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 1.75 -1 0
+  name "72"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.25 -0.25 0
+  name "73"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.25 -1.5 0
+  name "74"
+  size 0.01 1 0.1
+}
+Wall {
+  translation 0 -0.25 0
+  name "75"
+  size 0.01 1 0.1
+}
+Wall {
+  translation 0.5 -2 0
+  name "76"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 1.25 -1.25 0
+  name "77"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.75 -1.5 0
+  name "78"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.5 0 0
+  name "79"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation -1.375 -2.01 0
+  rotation 0 0 1 1.5708
+  name "80"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.875 -1.5 0
+  rotation 0 0 1 1.5708
+  name "81"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.375 -2 0
+  rotation 0 0 1 1.5708
+  name "82"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.375 -1.5 0
+  rotation 0 0 1 1.5708
+  name "83"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.125 -1.75 0
+  rotation 0 0 1 1.5708
+  name "84"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.125 -1.25 0
+  rotation 0 0 1 1.5708
+  name "85"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.125 -6.74634e-14 0
+  rotation 0 0 1 1.5708
+  name "86"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.125 -2 0
+  rotation 0 0 1 1.5708
+  name "87"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.125 -1.75 0
+  rotation 0 0 1 1.5708
+  name "88"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.625 -1.5 0
+  rotation 0 0 1 1.5708
+  name "89"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1.375 -1.25 0
+  rotation 0 0 1 1.5708
+  name "90"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.125 -1.5 0
+  rotation 0 0 1 1.5708
+  name "91"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation 0.375 2 0
+  rotation 0 0 1 1.5708
+  name "92"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.375 0.75 0
+  rotation 0 0 1 1.5708
+  name "93"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.125 1 0
+  rotation 0 0 1 1.5708
+  name "94"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.625 1.25 0
+  rotation 0 0 1 1.5708
+  name "95"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1.125 1 0
+  rotation 0 0 1 1.5708
+  name "96"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.875 0.5 0
+  rotation 0 0 1 1.5708
+  name "97"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1.375 1.5 0
+  rotation 0 0 1 1.5708
+  name "98"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1.875 1.25 0
+  rotation 0 0 1 1.5708
+  name "99"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -1.385 2.25 0
+  rotation 0 0 1 1.5708
+  name "100"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.365 -1.25 0
+  rotation 0 0 1 1.5708
+  name "101"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -0.875 0.25 0
+  rotation 0 0 1 1.5708
+  name "102"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.625 9.18304e-07 0
+  rotation 0 0 1 1.5708
+  name "103"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.625 -0.249999 0
+  rotation 0 0 1 1.5708
+  name "104"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.125 -9.18297e-07 0
+  rotation 0 0 1 1.5708
+  name "105"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.375 -1.83655e-06 0
+  rotation 0 0 1 1.5708
+  name "106"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.125 -0.250001 0
+  rotation 0 0 1 1.5708
+  name "107"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.125 -0.250001 0
+  rotation 0 0 1 1.5708
+  name "108"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.875 -0.5 0
+  rotation 0 0 1 1.5708
+  name "109"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.875 -0.5 0
+  rotation 0 0 1 1.5708
+  name "110"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.875 -0.75 0
+  rotation 0 0 1 1.5708
+  name "111"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.755 -0.25 0
+  rotation 0 0 1 1.5708
+  name "112"
+  size 0.01 0.5 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.875 -1 0
+  rotation 0 0 1 1.5708
+  name "113"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.375 -1 0
+  rotation 0 0 1 1.5708
+  name "114"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.375 -0.5 0
+  rotation 0 0 1 1.5708
+  name "115"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -0.125 1.75 0
+  rotation 0 0 1 1.5708
+  name "116"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.875 1.75 0
+  rotation 0 0 1 1.5708
+  name "117"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.125 1.5 0
+  rotation 0 0 1 1.5708
+  name "118"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.375 0.25 0
+  rotation 0 0 1 1.5708
+  name "119"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.28782 0.294142 0
+  rotation 0 0 -1 0.7854000000000001
+  name "120"
+  size 0.01 0.1 0.1
+  appearance Roughcast {
+    colorOverride 0 1 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 2.46393 -0.964574 0
+  rotation 0 0 -1 0.7854000000000001
+  name "121"
+  size 0.01 0.1 0.1
+  appearance Roughcast {
+    colorOverride 0 1 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 2.0397 1.79327 0
+  rotation 0 0 -1 -0.7854
+  name "122"
+  size 0.01 0.1 0.1
+  appearance Roughcast {
+    colorOverride 0 1 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.625 1.5 0
+  rotation 0 0 1 1.5708
+  name "123"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.125 1.25 0
+  rotation 0 0 1 1.5708
+  name "124"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.375 1.25 0
+  rotation 0 0 1 1.5708
+  name "125"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.375 1.75 0
+  rotation 0 0 1 1.5708
+  name "126"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.375 1.75 0
+  rotation 0 0 1 1.5708
+  name "127"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 1.5 0
+  rotation 0 0 1 1.5708
+  name "128"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 1 0
+  rotation 0 0 1 1.5708
+  name "129"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.625 2.25 0
+  rotation 0 0 1 1.5708
+  name "130"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.125 0.75 0
+  rotation 0 0 1 1.5708
+  name "131"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.865 1 0
+  rotation 0 0 1 1.5708
+  name "132"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.875 -2.25 0
+  rotation 0 0 1 1.5708
+  name "133"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 -2 0
+  rotation 0 0 1 1.5708
+  name "134"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.125 -2 0
+  rotation 0 0 1 1.5708
+  name "135"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.375 -1.75 0
+  rotation 0 0 1 1.5708
+  name "136"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.125 -1.25 0
+  rotation 0 0 1 1.5708
+  name "137"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.375 -0.5 0
+  rotation 0 0 1 1.5708
+  name "138"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.375 2.75486e-06 0
+  rotation 0 0 1 1.5708
+  name "139"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 -1.25 0
+  rotation 0 0 1 1.5708
+  name "140"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.625 -2 0
+  rotation 0 0 1 1.5708
+  name "141"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.875 -2.25 0
+  rotation 0 0 1 1.5708
+  name "142"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.375 -2 0
+  rotation 0 0 1 1.5708
+  name "143"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.375 -1.5 0
+  rotation 0 0 1 1.5708
+  name "144"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.375 -1 0
+  rotation 0 0 1 1.5708
+  name "145"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 -1.75 0
+  rotation 0 0 1 1.5708
+  name "146"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 -1.25 0
+  rotation 0 0 1 1.5708
+  name "147"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 -0.75 0
+  rotation 0 0 1 1.5708
+  name "148"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 0.25 0
+  rotation 0 0 1 1.5708
+  name "149"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 1.5 0
+  rotation 0 0 1 1.5708
+  name "150"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 0.75 0
+  rotation 0 0 1 1.5708
+  name "151"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 -0.25 0
+  rotation 0 0 1 1.5708
+  name "152"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.125 6.74634e-14 0
+  rotation 0 0 1 1.5708
+  name "153"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.125 0.25 0
+  rotation 0 0 1 1.5708
+  name "154"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.375 0.25 0
+  rotation 0 0 1 1.5708
+  name "155"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.375 9.183e-07 0
+  rotation 0 0 1 1.5708
+  name "156"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.625 1.83656e-06 0
+  rotation 0 0 1 1.5708
+  name "157"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 2.125 -0.5 0
+  rotation 0 0 1 1.5708
+  name "158"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.125 2.25 0
+  rotation 0 0 1 1.5708
+  name "159"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.375 2 0
+  rotation 0 0 1 1.5708
+  name "160"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.875 2 0
+  rotation 0 0 1 1.5708
+  name "161"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.875 1.75 0
+  rotation 0 0 1 1.5708
+  name "162"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.875 0.75 0
+  rotation 0 0 1 1.5708
+  name "163"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.875 -0.25 0
+  rotation 0 0 1 1.5708
+  name "164"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.875 -0.250001 0
+  rotation 0 0 1 1.5708
+  name "165"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.875 -1e-06 0
+  rotation 0 0 1 1.5708
+  name "166"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.875 0.249999 0
+  rotation 0 0 1 1.5708
+  name "167"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.875 -0.5 0
+  rotation 0 0 1 1.5708
+  name "168"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 2.375 0.5 0
+  rotation 0 0 1 1.5708
+  name "169"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 0.5 0
+  rotation 0 0 1 1.5708
+  name "170"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 0.25 0
+  rotation 0 0 1 1.5708
+  name "171"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.625 -0.25 0
+  rotation 0 0 1 1.5708
+  name "172"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.01 -0.75 0
+  rotation 0 0 1 1.5708
+  name "173"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 0.75 -1.5 0
+  rotation 0 0 1 1.5708
+  name "174"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 1.74 -1.5 0
+  rotation 0 0 1 1.5708
+  name "175"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 1.5 -1 0
+  rotation 0 0 1 1.5708
+  name "176"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 2.25 1.75 0
+  rotation 0 0 1 1.5708
+  name "177"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 2.25 1.25 0
+  rotation 0 0 1 1.5708
+  name "178"
+  size 0.01 0.5 0.1
+}
+Wall {
+  translation 1.75 0.5 0
+  rotation 0 0 1 1.5708
+  name "179"
+  size 0.01 0.5 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -1 -1.125 0
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1 1.375 0
+  name "180"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.75 0.875 0
+  name "181"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.5 0.375 0
+  name "182"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.5 1.125 0
+  name "183"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.24 2.125 0
+  name "184"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.5 2.125 0
+  name "185"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2 2.125 0
+  name "186"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.5 1.875 0
+  name "187"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 2 1.875 0
+  name "188"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.5 1.625 0
+  name "189"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1 1.875 0
+  name "190"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.25 1.375 0
+  name "191"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.5 1.125 0
+  name "192"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.24 0.625 0
+  name "193"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1.5 0.625 0
+  name "194"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.99 0.625 0
+  name "195"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.99 0.875 0
+  name "196"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.74 2.375 0
+  name "197"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0.49 2.115 0
+  name "198"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.26 2.115 0
+  name "199"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -0.76 2.115 0
+  name "200"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.51 1.855 0
+  name "201"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1.75 1.625 0
+  name "202"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2 1.375 0
+  name "203"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 0 2.375 0
+  name "204"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2.25 0.875 0
+  name "205"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 1 -0.375 0
+  name "206"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 1.5 -0.375 0
+  name "207"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.33 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation 0.75 -0.375 0
+  name "208"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.25 -0.365 0
+  name "209"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation 2 1.25 0
+  name "210"
+  size 0.01 0.5 0.1
+  appearance Roughcast {
+    colorOverride 1 1 0.5
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
+Wall {
+  translation -0.75 0.625 0
+  name "211"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -1 0.875 0
+  name "212"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2 -0.375 0
+  name "213"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.5 -0.625 0
+  name "214"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.5 -0.875 0
+  name "215"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.75 -0.875 0
+  name "216"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.75 -1.125 0
+  name "217"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.25 -0.875 0
+  name "218"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -1.5 -0.375 0
+  name "219"
+  size 0.01 0.25 0.1
+  appearance PBRAppearance {
+    metalness 0
+  }
+}
+Wall {
+  translation -2.25 -2.125 0
+  name "220"
+  size 0.01 0.25 0.1
+  appearance Roughcast {
+  }
+}
+Wall {
+  translation -2 -2.125 0
+  name "221"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2 -1.375 0
+  name "222"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.25 -1.625 0
+  rotation 0 -1 0 -5.307179586466759e-06
+  name "223"
+  size 0.01 0.25 0.1
+}
+Wall {
+  translation -2.25 -0.875 0
+  rotation 0 -1 0 -5.307179586466759e-06
+  name "224"
+  size 0.01 0.75 0.1
+}
+Wall {
+  translation -2.5 0 0
+  rotation 0 -1 0 -5.307179586466759e-06
+  name "225"
+  size 0.01 5 0.1
+}
+Wall {
+  translation 2.5 0 0
+  rotation 0 -1 0 -5.307179586466759e-06
+  name "226"
+  size 0.01 5 0.1
+}
+Wall {
+  translation 0 2.5 0
+  rotation 0 0 1 -1.5707953071795862
+  name "227"
+  size 0.01 5 0.1
+}
+AutoNova {
+  translation 0.125 -2.625 0.0199283
+  rotation 0 0 1 1.5708
+  controller "my_controller"
+}
