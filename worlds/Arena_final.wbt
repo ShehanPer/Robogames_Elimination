@@ -13,7 +13,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 0.03696539269642071 -2.0583478266702815 7.962200510179185
+  position 0.22840173280352716 0.04776061488875545 9.356150098890165
 }
 TexturedBackground {
 }
@@ -32,6 +32,68 @@ RectangleArena {
     type "dark strip"
     colorOverride 0 0 0
   }
+}
+DEF red_pit_1_ Transform {
+  translation 1.375 -0.127 0.0002
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry Plane {
+        size 0.25 0.25
+      }
+    }
+  ]
+}
+DEF orrange_pit Transform {
+  translation 1.375 -0.127 8e-05
+  scale 3 3 1
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0.33 0
+        }
+      }
+      geometry Plane {
+        size 0.25 0.25
+      }
+    }
+  ]
+}
+DEF red_pit Transform {
+  translation 1.375 1.373 0.0002
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry Plane {
+        size 0.25 0.25
+      }
+    }
+  ]
+}
+DEF orrange_pit1 Transform {
+  translation 1.375 1.37 8e-05
+  scale 3 3 1
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0.33 0
+        }
+      }
+      geometry Plane {
+        size 0.25 0.25
+      }
+    }
+  ]
 }
 Wall {
   translation -1.125 -0.74 0

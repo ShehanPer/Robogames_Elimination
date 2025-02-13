@@ -67,8 +67,8 @@ Robot {
     SpotLight {
       attenuation 0 0 0.4
       beamWidth 0.7
-      direction 1 0 -0.4
-      intensity 0
+      direction 1 0 0
+      intensity 0.2
     }
     JetBotRaspberryPiCamera {
       translation 0.075 0 0.037

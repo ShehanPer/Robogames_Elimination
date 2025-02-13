@@ -37,6 +37,8 @@ us_names = ['ps4', 'ps2', 'ps0','ps8']  # Front, Left, Right
 IR_sensors = [get_device(name) for name in us_names]
 side_sensor_names=['ps7','ps1','ps3','ps5']
 IR_side_sensors = [get_device(name) for name in side_sensor_names]
+green_cordinates = []
+direction_map = [[0] * 20 for _ in range(20)]
 
 L_encoder = get_device('left encoder')
 R_encoder = get_device('right encoder')
@@ -66,7 +68,18 @@ def angular_difference(target, current):
     diff = target - current
     return (diff + math.pi) % (2 * math.pi) - math.pi  # Keep in range [-π, π]
 
-def use_camera(cam):
+def check_grean(left_frame,right_frame,robot_x,robot_y):
+    grean_pixel =(left_frame[:,:,1]>200) & (left_frame[:,:,0]<100) & (left_frame[:,:,2]<100)
+    grean_pixel2 =(right_frame[:,:,1]>200) & (right_frame[:,:,0]<100) & (right_frame[:,:,2]<100)
+    if (grean_pixel.any() or grean_pixel2.any()):
+        if(IR_sensors[1].getValue()>800):
+            print('grean found 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢')
+            green_cordinates.append([robot_x,robot_y])
+
+def check_yellow(middle_frame,robot_x,robot_y):
+    pass
+
+def use_camera(cam,robot_x,robot_y):
     image =cam.getImage()
     width = cam.getWidth()
     height = cam.getHeight()
@@ -74,14 +87,21 @@ def use_camera(cam):
     image_array = np.frombuffer(image,dtype=np.uint8).reshape((height,width,4))
     img_bgr = cv2.cvtColor(image_array,cv2.COLOR_RGB2BGR)
     img_rgb = image_array[:,:,:3]
-    #print(img_rgb)
+
+    left_frame = img_rgb[:,:width//3]
+    middle_frame = img_rgb[:,width//3:2*width//3]
+    right_frame = img_rgb[:,2*width//3:]
+    
 
 
     new_height = int(height*2)
     new_width = int(width*2)
     img_resize = cv2.resize(img_rgb,(new_width,new_height),interpolation=cv2.INTER_LINEAR)
+    check_grean(left_frame,right_frame,robot_x,robot_y)
+    cv2.imshow('camera',img_rgb)
+    cv2.waitKey(1)
 
-    return img_rgb
+
 
 def adjest_positionF():
     
@@ -92,7 +112,6 @@ def adjest_positionF():
             IR_readings = [IR_sensors[i].getValue() for i in range(3)]
             if IR_readings[1]-880!=0:
                 deff = (IR_readings[1]-880)/abs(IR_readings[1]-880)
-                print(deff,IR_readings[1])
                 L_motor.setVelocity(-2*deff)
                 R_motor.setVelocity(-2*deff)
                 if 878<IR_readings[1]<882:
@@ -108,11 +127,12 @@ def adjest_positionB():
         
         while robot.step(timestep) != -1:
             IR_readings = [IR_sensors[i].getValue() for i in range(4)]
+
             if IR_readings[3]-880!=0:
                 deff = (IR_readings[3]-880)/abs(IR_readings[3]-880)
-                print(deff,IR_readings[3])
                 L_motor.setVelocity(2*deff)
                 R_motor.setVelocity(2*deff)
+
                 if 878<IR_readings[3]<882:
                     L_motor.setVelocity(0)
                     R_motor.setVelocity(0)
@@ -123,14 +143,14 @@ def adjest_positionB():
 def adjest_positionRotation():
     
     side_IR_readings = [IR_side_sensors[i].getValue() for i in range(4)]
-    print(side_IR_readings)
+    #print(side_IR_readings)
     if  800<side_IR_readings[0] and 800<side_IR_readings[1] :
             
             while robot.step(timestep) != -1:
                 side_IR_readings = [IR_side_sensors[i].getValue() for i in range(4)]
                 if (side_IR_readings[0]-side_IR_readings[1])!=0:
                     deff = (side_IR_readings[0]-side_IR_readings[1])/abs(side_IR_readings[0]-side_IR_readings[1])
-                    print('adjesting rot left')
+                    # print('adjesting rot left')
                     L_motor.setVelocity(-1*deff)
                     R_motor.setVelocity(1*deff)
                     if abs(side_IR_readings[0]-side_IR_readings[1])<2:
@@ -145,7 +165,7 @@ def adjest_positionRotation():
                 side_IR_readings = [IR_side_sensors[i].getValue() for i in range(4)]
                 if (side_IR_readings[2]-side_IR_readings[3])!=0:
                     deff = (side_IR_readings[2]-side_IR_readings[3])/abs(side_IR_readings[2]-side_IR_readings[3])
-                    print('adjesting rot right', abs(side_IR_readings[2]-side_IR_readings[3]))
+                    #print('adjesting rot right', abs(side_IR_readings[2]-side_IR_readings[3]))
 
                     L_motor.setVelocity(-1*deff)
                     R_motor.setVelocity(1*deff)
@@ -169,7 +189,8 @@ def moveForward():
         #     adjest_positionRotation()
         L_motor.setVelocity(8)
         R_motor.setVelocity(8)
-
+            
+        
         # Compute traveled distance
         distance_x,distance_y = abs(current_gpsVal[0]-start_gpsVal[0])*100,abs(current_gpsVal[1]-start_gpsVal[1])*100
         
@@ -211,8 +232,6 @@ def turnRight():
     initial_Ryaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])  # Initial yaw
     target_angleR = normalize_angle(initial_Ryaw - math.radians(90))  # Target yaw (-90°)
 
-    print(f"Starting turn | Initial Yaw: {math.degrees(initial_Ryaw):.2f}° | Target Yaw: {math.degrees(target_angleR):.2f}°")
-
     L_motor.setVelocity(5)
     R_motor.setVelocity(-5)
 
@@ -220,10 +239,8 @@ def turnRight():
         current_Ryaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])
         yaw_diffR = math.degrees(abs(angular_difference(target_angleR, current_Ryaw)))  # Fix wraparound
 
-        #print(f"Yaw: {math.degrees(current_Ryaw):.2f}° | ΔYaw: {yaw_diffR:.2f}° ")
-
         if abs(yaw_diffR)<1:  # Stop when true yaw difference reaches 90°
-            print("✅ Turn Complete! Stopping motors.")
+            #print("Turn right Complete! Stopping motors.")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
             adjest_positionRotation()
@@ -234,7 +251,6 @@ def turnRight():
 def turnLeft():
     #turn 90 degree Left
     robot.step(timestep)    
-    print("turning left")
     initial_Lyaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])  # Extract yaw angle
    
     target_angleL= normalize_angle(initial_Lyaw+math.radians(90))  # Target yaw (-90 degrees)
@@ -253,7 +269,7 @@ def turnLeft():
         
       
         if(abs(yaw_diffL)<1):
-            print("stoping")
+            #print("Turn left Complete! Stopping motors.")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
             adjest_positionRotation()
@@ -276,21 +292,36 @@ def robotStop(getTime):
 
 
 def read_sensors():
-    dir = [1 if IR_sensors[i].getValue() > 750 else 0 for i in range(3)]
+    dir = [1 if IR_sensors[i].getValue() > 750 else 0 for i in range(4)]
     return dir
 
-
+def directionMap(previous_direction):
+    store_direction = []
+    Directions = read_sensors()
+    if(previous_direction == 0):
+        store_direction = [Directions[3],Directions[2],Directions[1],Directions[0]]
+        return store_direction
+    if(previous_direction == 1):
+        store_direction = [Directions[2],Directions[1],Directions[0],Directions[3]]
+        return store_direction
+    if(previous_direction == 3):
+        store_direction = [Directions[0],Directions[3],Directions[2],Directions[1]]
+        return store_direction
+    if(previous_direction == 2):
+        store_direction = [Directions[1],Directions[0],Directions[3],Directions[2]]
+        return store_direction
+    
 
 
 def backtrack(previous_direction):
     """Turn the robot back to the original direction and move forward"""
     moveBackward()
     if previous_direction == "LEFT":
-        print("Backtracking LEFT")
+        #print("Backtracking LEFT")
         turnRight()
 
     elif previous_direction == "RIGHT":
-        print("Backtracking RIGHT")
+        #print("Backtracking RIGHT")
         turnLeft()
     else:
         print("Backtracking UP")
@@ -313,8 +344,13 @@ def update_position(direction,robot_x,robot_y):
 
 def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
     """Recursive maze search with proper backtracking"""
-    global maze_map
+    global maze_map, direction_map
+
     temp_Direction = setDirection
+    use_camera(camera,robot_x,robot_y)
+    store_Direction = directionMap(setDirection)
+    direction_map[robot_x][robot_y] = store_Direction
+
     if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
         print("Out of bounds")
         return  # Out of bounds
@@ -359,11 +395,14 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
             search_maze(temp[0],temp[1],new_direction,"RIGHT")
 
     backtrack(previous_direction)  # Backtrack if no movement possible
-adj_pos=False
+
+
 moveForward()
-adj_pos = True
 search_maze(robot_x=19,robot_y=10,setDirection=0)
 print("Maze Search completed")
-
+print("Green Cordinates",green_cordinates)
+print("Direction Map")
+for line in direction_map:
+    print(line)
 robotStop(20)
 
