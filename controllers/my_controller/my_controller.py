@@ -49,11 +49,19 @@ R_motor = robot.getDevice('right motor')
 L_motor.setPosition(float('inf'))
 R_motor.setPosition(float('inf'))
 
+L_motor.setVelocity(0)
+R_motor.setVelocity(0)  
+
 inertial_unit =get_device('Inertial Unit')
 gyro = get_device('gyroScope')
 
 gps_device = get_device('GPS')
 camera=get_device('camera')
+
+
+def delay(time):
+    for _ in range(int(time * 1000 / timestep)):
+        robot.step(timestep)
 
 # Function to convert ultrasonic readings (depends on the LUT)
 def ir_to_distance(value):
@@ -74,9 +82,10 @@ def check_grean(left_frame,right_frame,robot_x,robot_y):
     if (grean_pixel.any() or grean_pixel2.any()):
         if(IR_sensors[1].getValue()>800):
             print('grean found 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢')
+            delay(5)
             green_cordinates.append([robot_x,robot_y])
 
-def check_yellow(middle_frame,robot_x,robot_y):
+def check_yellow(middle_frame,robot_x,robot_y): 
     pass
 
 def use_camera(cam,robot_x,robot_y):
