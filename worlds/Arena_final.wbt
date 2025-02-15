@@ -13,7 +13,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.2515848394683198 0.8903207753704969 0.3795180963977572 1.2800447821337142
-  position -0.5878339637834665 -2.9430880956920116 1.518351783663133
+  position -1.5810267925471477 -3.553121550934529 4.275225483539652
   follow "AutoNova"
   followType "None"
 }
@@ -1692,7 +1692,7 @@ Wall {
   size 0.01 5 0.1
 }
 AutoNova {
-  translation 0.125 -2.625 0.0175649
+  translation 0.125 -2.375 0.0175649
   rotation 0 0 1 1.5708
   controller "my_controller"
 }
