@@ -1,62 +1,9 @@
 """my_controller controller."""
 
-from controller import Robot
-import math
-import cv2
-import numpy as np
+from baseFunctions import *
 
 
 
-# Create the Robot instance
-robot = Robot()
-
-# Get the time step of the current world
-timestep = int(robot.getBasicTimeStep())
-
-# Directions mapping (dx, dy)
-DIRECTION_MAP = [(-1,0),(0,1),(1,0),(0,-1)] # UP, RIGHT, DOWN, LEFT
-maze_array = np.zeros((20, 20))
-
-# Define a 20x20 grid with all zeros (0 = unvisited, 1 = visited)
-maze_map = [[0] * 20 for _ in range(20)]
-
-# Initial robot position
-robot_x, robot_y = 19, 10  # Assuming the robot starts at (0, 0)
-
-
-# Function to get device instances
-def get_device(device_name):
-    device = robot.getDevice(device_name)
-    if device:
-        device.enable(timestep)
-    return device
-
-mark_pos=True
-# Get ultrasonic sensors
-us_names = ['ps4', 'ps2', 'ps0','ps8']  # Front, Left, Right
-IR_sensors = [get_device(name) for name in us_names]
-side_sensor_names=['ps7','ps1','ps3','ps5']
-IR_side_sensors = [get_device(name) for name in side_sensor_names]
-green_cordinates = []
-direction_map = [[0] * 20 for _ in range(20)]
-flood_array01 = [['x'] * 20 for _ in range(20)]
-
-L_encoder = get_device('left encoder')
-R_encoder = get_device('right encoder')
-
-L_motor = robot.getDevice('left motor')
-R_motor = robot.getDevice('right motor')
-
-L_motor.setPosition(float('inf'))
-R_motor.setPosition(float('inf'))
-
-
-
-inertial_unit =get_device('Inertial Unit')
-gyro = get_device('gyroScope')
-
-gps_device = get_device('GPS')
-camera=get_device('camera')
 
 # Function to convert ultrasonic readings (depends on the LUT)
 def ir_to_distance(value):
@@ -70,40 +17,6 @@ def angular_difference(target, current):
     """Compute shortest difference between two angles in radians."""
     diff = target - current
     return (diff + math.pi) % (2 * math.pi) - math.pi  # Keep in range [-π, π]
-
-def check_grean(left_frame,right_frame,robot_x,robot_y):
-    grean_pixel =(left_frame[:,:,1]>200) & (left_frame[:,:,0]<100) & (left_frame[:,:,2]<100)
-    grean_pixel2 =(right_frame[:,:,1]>200) & (right_frame[:,:,0]<100) & (right_frame[:,:,2]<100)
-    if (grean_pixel.any() or grean_pixel2.any()):
-        if(IR_sensors[1].getValue()>800):
-            print('grean found 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢')
-            green_cordinates.append([robot_x,robot_y])
-
-def check_yellow(middle_frame,robot_x,robot_y):
-    pass
-
-def use_camera(cam,robot_x,robot_y):
-    image =cam.getImage()
-    width = cam.getWidth()
-    height = cam.getHeight()
-
-    image_array = np.frombuffer(image,dtype=np.uint8).reshape((height,width,4))
-    img_bgr = cv2.cvtColor(image_array,cv2.COLOR_RGB2BGR)
-    img_rgb = image_array[:,:,:3]
-
-    left_frame = img_rgb[:,:width//3]
-    middle_frame = img_rgb[:,width//3:2*width//3]
-    right_frame = img_rgb[:,2*width//3:]
-    
-
-
-    new_height = int(height*2)
-    new_width = int(width*2)
-    img_resize = cv2.resize(img_rgb,(new_width,new_height),interpolation=cv2.INTER_LINEAR)
-    check_grean(left_frame,right_frame,robot_x,robot_y)
-    cv2.imshow('camera',img_rgb)
-    cv2.waitKey(1)
-
 
 
 def adjest_positionF():
@@ -179,7 +92,7 @@ def adjest_positionRotation():
                 else:
                     break
 
-num_boxes= 0
+
 def moveForward():
     global adj_pos,num_boxes
     robot.step(timestep)
@@ -293,29 +206,6 @@ def robotStop(getTime):
     robot.step(timestep*getTime)
     
 
-
-def read_sensors():
-    dir = [1 if IR_sensors[i].getValue() > 750 else 0 for i in range(4)]
-    return dir
-
-def directionMap(previous_direction):
-    store_direction = []
-    Directions = read_sensors()
-    if(previous_direction == 0):
-        store_direction = [Directions[3],Directions[2],Directions[1],Directions[0]]
-        return store_direction
-    if(previous_direction == 1):
-        store_direction = [Directions[2],Directions[1],Directions[0],Directions[3]]
-        return store_direction
-    if(previous_direction == 3):
-        store_direction = [Directions[0],Directions[3],Directions[2],Directions[1]]
-        return store_direction
-    if(previous_direction == 2):
-        store_direction = [Directions[1],Directions[0],Directions[3],Directions[2]]
-        return store_direction
-    
-
-
 def backtrack(previous_direction):
     """Turn the robot back to the original direction and move forward"""
     moveBackward()
@@ -330,28 +220,22 @@ def backtrack(previous_direction):
         print("")
 
     
-def update_position(direction,robot_x,robot_y):
-    """Update (x, y) based on movement direction"""
-
-    dx, dy = DIRECTION_MAP[direction]
-    cell_x = robot_x + dx
-    cell_y = robot_y + dy
-
-    if maze_map[cell_x][cell_y] == 0:
-        robot_x = cell_x
-        robot_y = cell_y
-        return (robot_x,robot_y)
-    return None
-
-
 
 def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
     """Recursive maze search with proper backtracking"""
     global maze_map, direction_map
 
     temp_Direction = setDirection
-    use_camera(camera,robot_x,robot_y)
-    store_Direction = directionMap(setDirection)
+    lframe,mframe,rframe=use_camera(camera)
+
+    if check_grean(lframe,rframe):
+        green_cordinates.append([robot_x,robot_y])
+
+    if check_orange(mframe):
+        store_Direction=[1,1,1,1]
+    else:
+        store_Direction = directionMap(setDirection)
+    
     direction_map[robot_x][robot_y] = store_Direction
 
     if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
@@ -360,13 +244,11 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
 
     # Mark as visited
     maze_map[robot_x][robot_y] = 1
-    for line in maze_map:
-        print(line)
+    # for line in maze_map:
+    #     print(line)
     print("Visited:", robot_x, robot_y)
 
     dir = read_sensors()  # Get sensor readings
-
-    
 
 
     if dir[0] == 0:  # Left open
@@ -398,6 +280,7 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
             search_maze(temp[0],temp[1],new_direction,"RIGHT")
 
     backtrack(previous_direction)  # Backtrack if no movement possible
+
 
 def update_Floodposition(flood_array,direction,robot_x,robot_y):
     """Update (x, y) based on movement direction"""
@@ -470,15 +353,15 @@ def go_robo():
     
     
 
-# moveForward()
-# search_maze(robot_x=19,robot_y=10,setDirection=0)
-# print("Maze Search completed")
-# print("Green Cordinates",green_cordinates)
-# print("Direction Map")
-# for line in direction_map:
-#     print(line)
+moveForward()
+search_maze(robot_x=19,robot_y=10,setDirection=0)
+print("Maze Search completed")
+print("Green Cordinates",green_cordinates)
+print("Direction Map")
+for line in direction_map:
+    print(line)
 
-# print(num_boxes)
+print(num_boxes)
 
 robotStop(20)
 green_cordinates =[ [8, 0], [2, 18], [13, 19]]
@@ -502,8 +385,10 @@ direction_map =[[[0, 0, 1, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 
 [[1, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1], [1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 0, 0], [1, 1, 0, 1], [0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [0, 0, 1, 1], [1, 1, 0, 0]],
 [[0, 1, 1, 1], [0, 1, 0, 1], [1, 1, 0, 1], [1, 0, 0, 1], [0, 1, 1, 0], [0, 1, 0, 1], [0, 1, 1, 1], [0, 0, 1, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 1]],
 [[1, 0, 0, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 0, 0, 0], [1, 1, 0, 0]]]
-start_x,start_y = green_cordinates[0][0],green_cordinates[0][1]
-flood_maze(robot_x=start_x,robot_y=start_y,flood_arr=flood_array01,setDirection=0,end_des=[19,10])
-for line in flood_array01:
-    print(line)
+
+
+# start_x,start_y = green_cordinates[1][0],green_cordinates[1][1]
+# flood_maze(robot_x=start_x,robot_y=start_y,flood_arr=flood_array01,setDirection=0,end_des=[8,0])
+# for line in flood_array01:
+#     print(line)
 

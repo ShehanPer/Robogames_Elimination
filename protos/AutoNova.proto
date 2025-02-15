@@ -55,7 +55,7 @@ Robot {
       name "ps4"
     }
     Mir100UltrasonicSensor {
-      translation 0.073 0 0.009
+      translation 0.073 0 0.041
       name "ps2"
     }
     Gyro {
@@ -71,7 +71,7 @@ Robot {
       intensity 0.2
     }
     JetBotRaspberryPiCamera {
-      translation 0.075 0 0.037
+      translation 0.06 0 0.005
       fieldOfView 2
       width 360
       height 360
