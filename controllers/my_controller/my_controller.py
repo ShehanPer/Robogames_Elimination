@@ -311,63 +311,116 @@ def update_Floodposition(flood_array,direction,robot_x,robot_y):
         return (robot_x,robot_y)
     return None
 
-def flood_maze(robot_x,robot_y,flood_arr,setDirection,end_des,previous_direction=None):
+def flood_maze(target_x,target_y,flood_arr,end_des):
     
     global maze_map, direction_map,mark_pos
     flood_array = flood_arr
     #temp_Direction = setDirection
     end_des = end_des
-    if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
+    if not (0 <= target_x < 20 and 0 <= target_y < 20):
         print("Out of bounds")
         return  # Out of bounds
-    if flood_array[robot_x][robot_y]==end_des:
+    if flood_array[target_x][target_y]==end_des:
         return
     if mark_pos:
-        flood_array[robot_x][robot_y] = 0
+        flood_array[target_x][target_y] = 0
         mark_pos=False
-    cellWalls = getWalls(robot_x,robot_y)  # Get sensor readings
+    cellWalls = getWalls(target_x,target_y)  # Get sensor readings
 
     
     if cellWalls[0] == 0:  # down open
         print("down open")
-        new_direction = 2
-        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        temp = update_Floodposition(flood_array,2,target_x,target_y)
         if (temp):
-            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
-            # setDirection=new_direction
-            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"DOWN")
+            flood_array[temp[0]][temp[1]] = flood_array[target_x][target_y]+1
+            flood_maze(temp[0],temp[1],flood_array,end_des)
 
     if cellWalls[1] == 0:  # Right open
         print("Right open")
-        new_direction = 1
-        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        temp = update_Floodposition(flood_array,1,target_x,target_y)
         if (temp):
-            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
-            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"RIGHT")
+            flood_array[temp[0]][temp[1]] = flood_array[target_x][target_y]+1
+            flood_maze(temp[0],temp[1],flood_array,end_des)
 
     if cellWalls[3] == 0:  # Left open
         print("Left open")
-        new_direction = 3
-        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        temp = update_Floodposition(flood_array,3,target_x,target_y)
         if (temp):
-            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
+            flood_array[temp[0]][temp[1]] = flood_array[target_x][target_y]+1
             # setDirection=new_direction
-            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"LEFT")
+            flood_maze(temp[0],temp[1],flood_array,end_des)
     
     if cellWalls[2] == 0:  # Up open
         print("up  open")
-        new_direction = 0
-       
-        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
-        
+        temp = update_Floodposition(flood_array,0,target_x,target_y)
         if temp is not None:
-            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
+            flood_array[temp[0]][temp[1]] = flood_array[target_x][target_y]+1
             # setDirection=new_direction
-            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"LEFT")
+            flood_maze(temp[0],temp[1],flood_array,end_des)
 
-def go_robo():
-    global flood_array01
+def floodfillturn(current_direction,next_direction):
+    if current_direction=="UP":
+        if next_direction=="DOWN":
+            turnReverse()
+        elif next_direction=="LEFT":
+            turnLeft()
+        elif next_direction=="RIGHT":
+            turnRight()
     
+    elif current_direction=="DOWN":
+        if next_direction=="UP":
+            turnReverse()
+        elif next_direction=="LEFT":
+            turnRight()
+        elif next_direction=="RIGHT":
+            turnLeft()
+    
+    elif current_direction=="LEFT":
+        if next_direction=="RIGHT":
+            turnReverse()
+        elif next_direction=="UP":
+            turnRight()
+        elif next_direction=="DOWN":
+            turnLeft()
+    
+    elif current_direction=="RIGHT":
+        if next_direction=="LEFT":
+            turnReverse()
+        elif next_direction=="UP":
+            turnLeft()
+        elif next_direction=="DOWN":
+            turnRight()
+        else:
+            print("No need to turn")
+
+def floodfill_follow(robot_x,robot_y):
+    '''follow 0 position in flood array from current position'''
+    global flood_array
+
+    facing_direction="UP"
+
+
+
+    while flood_array[robot_x][robot_y]!=0:
+        if flood_array[robot_x+1][robot_y]==flood_array[robot_x][robot_y]-1: #down
+            floodfillturn(facing_direction,"DOWN")
+            facing_direction="DOWN"
+            pass
+        elif flood_array[robot_x-1][robot_y]==flood_array[robot_x][robot_y]-1: #up
+            floodfillturn(facing_direction,"UP")
+            facing_direction="UP"
+            pass
+        elif flood_array[robot_x][robot_y+1]==flood_array[robot_x][robot_y]-1: #right
+            floodfillturn(facing_direction,"RIGHT")
+            facing_direction="RIGHT"
+            pass
+        elif flood_array[robot_x][robot_y-1]==flood_array[robot_x][robot_y]-1: #left
+            floodfillturn(facing_direction,"LEFT")
+            facing_direction="LEFT"
+            pass
+        else:
+            print("Error : No path found")
+            return
     
 
 # moveForward()
@@ -405,8 +458,8 @@ direction_map =[[[0, 0, 1, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 
 
 
 start_x,start_y = green_cordinates[0][0],green_cordinates[0][1]
-flood_maze(robot_x=start_x,robot_y=start_y,flood_arr=flood_array01,setDirection=0,end_des=[19,10])
-for line in flood_array01:
+flood_maze(target_x=start_x,target_y=start_y,flood_arr=flood_array,end_des=[19,10])
+for line in flood_array:
     print(line)
 
 
