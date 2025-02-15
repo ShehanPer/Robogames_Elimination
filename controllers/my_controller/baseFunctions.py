@@ -26,7 +26,7 @@ side_sensor_names=['ps7','ps1','ps3','ps5']
 ######## Other global Variable ########
 green_cordinates = []
 direction_map = [[0] * 20 for _ in range(20)]
-flood_array01 = [['x'] * 20 for _ in range(20)]
+flood_array = [[-1] * 20 for _ in range(20)]
 
 num_boxes= 0
 
