@@ -31,7 +31,7 @@ def get_device(device_name):
         device.enable(timestep)
     return device
 
-
+mark_pos=True
 # Get ultrasonic sensors
 us_names = ['ps4', 'ps2', 'ps0','ps8']  # Front, Left, Right
 IR_sensors = [get_device(name) for name in us_names]
@@ -39,6 +39,7 @@ side_sensor_names=['ps7','ps1','ps3','ps5']
 IR_side_sensors = [get_device(name) for name in side_sensor_names]
 green_cordinates = []
 direction_map = [[0] * 20 for _ in range(20)]
+flood_array01 = [['x'] * 20 for _ in range(20)]
 
 L_encoder = get_device('left encoder')
 R_encoder = get_device('right encoder')
@@ -48,6 +49,8 @@ R_motor = robot.getDevice('right motor')
 
 L_motor.setPosition(float('inf'))
 R_motor.setPosition(float('inf'))
+
+
 
 inertial_unit =get_device('Inertial Unit')
 gyro = get_device('gyroScope')
@@ -176,12 +179,12 @@ def adjest_positionRotation():
                 else:
                     break
 
-
+num_boxes= 0
 def moveForward():
-    global adj_pos
+    global adj_pos,num_boxes
     robot.step(timestep)
     start_gpsVal=gps_device.getValues()
-
+    num_boxes +=1
     while robot.step(timestep) != -1:
         # Get encoder values and subtract offset
         current_gpsVal = gps_device.getValues()
@@ -196,7 +199,7 @@ def moveForward():
         
         if(25<distance_x<26 or 25<distance_y<26):
            
-            print("stop forward")
+            #print("stop forward")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
             robot.step(timestep*10)
@@ -204,10 +207,10 @@ def moveForward():
             break
 
 def moveBackward():
-       
+    global num_boxes 
     robot.step(timestep)
     start_gpsVal=gps_device.getValues()
-
+    num_boxes +=1
     while robot.step(timestep) != -1:
         # Get encoder values and subtract offset
         current_gpsVal = gps_device.getValues()
@@ -219,7 +222,7 @@ def moveBackward():
         
         if(25<distance_x<26 or 25<distance_y<26):
             stoping =True
-            print("stop backward")
+            #print("stop backward")
             L_motor.setVelocity(0)
             R_motor.setVelocity(0)
             robot.step(timestep*10)
@@ -324,7 +327,7 @@ def backtrack(previous_direction):
         #print("Backtracking RIGHT")
         turnLeft()
     else:
-        print("Backtracking UP")
+        print("")
 
     
 def update_position(direction,robot_x,robot_y):
@@ -367,7 +370,7 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
 
 
     if dir[0] == 0:  # Left open
-        print("Left open")
+        #print("Left open")
         new_direction = (temp_Direction - 1) % 4
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
@@ -377,7 +380,7 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
             search_maze(temp[0],temp[1],new_direction,"LEFT")
 
     if dir[1] == 0:  # Forward open
-        print("Forward open")
+        #print("Forward open")
         new_direction = temp_Direction
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
@@ -385,7 +388,7 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
             search_maze(temp[0],temp[1],new_direction,"UP")
 
     if dir[2] == 0:  # Right open
-        print("Right open")
+        #print("Right open")
         new_direction = (temp_Direction + 1) % 4
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
@@ -396,13 +399,111 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
 
     backtrack(previous_direction)  # Backtrack if no movement possible
 
+def update_Floodposition(flood_array,direction,robot_x,robot_y):
+    """Update (x, y) based on movement direction"""
+    
+    dx, dy = DIRECTION_MAP[direction]
+    cell_x = robot_x + dx
+    cell_y = robot_y + dy
+   
+    
+    if flood_array[cell_x][cell_y] == 'x':
+        robot_x = cell_x
+        robot_y = cell_y
+        return (robot_x,robot_y)
+    return None
 
-moveForward()
-search_maze(robot_x=19,robot_y=10,setDirection=0)
-print("Maze Search completed")
-print("Green Cordinates",green_cordinates)
-print("Direction Map")
-for line in direction_map:
-    print(line)
+def flood_maze(robot_x,robot_y,flood_arr,setDirection,end_des,previous_direction=None):
+    
+    global maze_map, direction_map,mark_pos
+    flood_array = flood_arr
+    #temp_Direction = setDirection
+    end_des = end_des
+    if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
+        print("Out of bounds")
+        return  # Out of bounds
+    if flood_array[robot_x][robot_y]==end_des:
+        return
+    if mark_pos:
+        flood_array[robot_x][robot_y] = 0
+        mark_pos=False
+    dir = direction_map[robot_x][robot_y]  # Get sensor readings
+
+    
+    if dir[0] == 0:  # down open
+        print("down open")
+        new_direction = 2
+        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        if (temp):
+            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
+            # setDirection=new_direction
+            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"DOWN")
+
+    if dir[1] == 0:  # Forward open
+        print("Right open")
+        new_direction = 1
+        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        if (temp):
+            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
+            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"RIGHT")
+    if dir[3] == 0:  # Left open
+        print("Left open")
+        new_direction = 3
+        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        if (temp):
+            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
+            # setDirection=new_direction
+            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"LEFT")
+    if dir[2] == 0:  # Up open
+        print("up  open")
+        new_direction = 0
+       
+        temp = update_Floodposition(flood_array,new_direction,robot_x,robot_y)
+        
+        if temp is not None:
+            flood_array[temp[0]][temp[1]] = flood_array[robot_x][robot_y]+1
+            # setDirection=new_direction
+            flood_maze(temp[0],temp[1],flood_array,new_direction,end_des,"LEFT")
+
+def go_robo():
+    global flood_array01
+    
+    
+
+# moveForward()
+# search_maze(robot_x=19,robot_y=10,setDirection=0)
+# print("Maze Search completed")
+# print("Green Cordinates",green_cordinates)
+# print("Direction Map")
+# for line in direction_map:
+#     print(line)
+
+# print(num_boxes)
+
 robotStop(20)
+green_cordinates =[ [8, 0], [2, 18], [13, 19]]
+direction_map =[[[0, 0, 1, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 1, 0], [0, 1, 1, 0], [1, 0, 1, 1], [1, 0, 1, 0], [0, 0, 1, 0], [1, 0, 1, 0], [0, 0, 1, 0], [1, 0, 1, 0], [0, 1, 1, 0]],
+[[0, 0, 0, 1], [0, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [0, 1, 1, 0], [0, 0, 1, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 0, 0], [1, 1, 0, 0], [1, 0, 0, 1], [0, 0, 1, 0], [0, 1, 1, 0], [0, 1, 0, 1], [0, 0, 1, 1], [1, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0]],
+[[0, 1, 0, 1], [0, 0, 0, 1], [1, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 1], [1, 0, 0, 1], [0, 0, 1, 0], [0, 1, 1, 0], [0, 0, 1, 1], [1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 1, 1], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1], [1, 1, 0, 0], [0, 0, 0, 1], [1, 1, 1, 0], [1, 0, 0, 1], [1, 1, 1, 0]],
+[[0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 0], [0, 1, 0, 0], [0, 1, 0, 1], [0, 1, 0, 1], [0, 1, 1, 1], [0, 1, 0, 1], [0, 0, 1, 1], [1, 1, 0, 0], [0, 0, 0, 1], [0, 0, 0, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 0], [1, 0, 1, 0], [0, 1, 1, 0]],
+[[0, 0, 0, 1], [1, 1, 1, 0], [1, 0, 0, 1], [1, 0, 1, 0], [0, 0, 1, 0], [0, 1, 1, 0], [1, 1, 0, 1], [1, 0, 0, 1], [1, 1, 0, 0], [0, 1, 0, 1], [0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 1, 0], [0, 0, 0, 1], [1, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [1, 1, 0, 0], [1, 0, 1, 1], [1, 1, 0, 0]],
+[[1, 0, 0, 1], [1, 0, 1, 0], [0, 1, 1, 0], [0, 0, 1, 1], [1, 0, 0, 0], [1, 0, 0, 0], [1, 1, 1, 0], [0, 0, 1, 1], [1, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 1, 1, 0], [0, 0, 1, 1], [0, 1, 1, 0]],
+[[0, 0, 1, 1], [0, 1, 1, 0], [0, 1, 0, 1], [0, 1, 0, 1], [0, 0, 1, 1], [0, 1, 1, 0], [0, 0, 1, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 0, 1, 0], [0, 1, 1, 0], [0, 0, 0, 1], [0, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 0, 0], [0, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [0, 1, 0, 1]],
+[[0, 1, 0, 1], [0, 1, 0, 1], [0, 1, 0, 1], [0, 1, 0, 1], [0, 1, 0, 1], [1, 0, 0, 1], [1, 1, 0, 0], [1, 0, 1, 1], [0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 0, 0], [0, 1, 1, 1], [0, 1, 0, 1], [1, 0, 0, 1], [1, 0, 1, 0], [0, 0, 1, 0], [1, 1, 0, 0]],
+[[1, 1, 0, 1], [0, 1, 0, 1], [0, 1, 0, 1], [1, 0, 0, 1], [1, 1, 0, 0], [0, 0, 1, 1], [1, 0, 1, 0], [0, 1, 1, 0], [0, 1, 0, 1], [0, 0, 1, 1], [0, 1, 1, 0], [0, 0, 0, 1], [1, 0, 1, 0], [1, 0, 0, 0], [1, 0, 0, 0], [1, 1, 0, 0], [0, 0, 1, 1], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0]],
+[[0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [0, 0, 1, 1], [1, 0, 1, 0], [1, 1, 0, 0], [0, 1, 1, 1], [1, 0, 0, 1], [0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [1, 1, 0, 0], [0, 0, 1, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 1], [0, 1, 0, 1]],
+[[0, 0, 0, 1], [0, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 0], [0, 0, 0, 1], [0, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 1], [1, 0, 0, 1], [1, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0], [0, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [0, 1, 0, 0]],
+[[0, 0, 0, 1], [0, 1, 0, 0], [1, 0, 1, 1], [0, 1, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, 1], [0, 0, 1, 0], [1, 1, 0, 0], [0, 1, 0, 1], [0, 1, 0, 1], [0, 0, 0, 1], [0, 1, 1, 0], [0, 1, 1, 1], [0, 0, 0, 1], [0, 1, 0, 0], [0, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 0], [0, 1, 0, 0]],
+[[0, 1, 0, 1], [0, 0, 0, 1], [1, 0, 1, 0], [0, 1, 0, 0], [0, 0, 1, 1], [1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 0, 0, 1], [0, 0, 0, 0], [0, 1, 0, 0], [0, 1, 0, 1], [0, 0, 0, 1], [0, 1, 1, 0], [1, 0, 1, 1], [0, 1, 0, 0]],
+[[0, 1, 0, 1], [0, 0, 0, 1], [1, 1, 1, 0], [0, 1, 0, 1], [1, 1, 0, 1], [0, 0, 1, 1], [0, 0, 0, 0], [0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 1, 0], [1, 0, 0, 1], [0, 1, 0, 0], [1, 1, 0, 1], [1, 1, 0, 1], [0, 0, 0, 1], [0, 1, 1, 0], [1, 1, 0, 1]],
+[[0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 1, 0, 0], [0, 0, 0, 1], [1, 0, 0, 0], [1, 0, 0, 0], [1, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [1, 0, 1, 0], [0, 0, 1, 0], [1, 1, 0, 0], [0, 0, 1, 1], [0, 1, 1, 0], [0, 0, 0, 1], [1, 0, 0, 0], [0, 1, 1, 0]],
+[[1, 0, 0, 1], [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 0], [0, 0, 1, 0], [1, 1, 0, 0], [0, 0, 1, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 0, 0], [0, 0, 0, 1], [1, 1, 1, 0], [1, 0, 0, 1], [0, 1, 1, 0], [0, 1, 0, 1], [1, 0, 0, 1], [1, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 1]],
+[[0, 1, 1, 1], [1, 0, 0, 1], [0, 1, 1, 0], [0, 0, 1, 1], [1, 0, 1, 0], [1, 1, 0, 0], [0, 1, 1, 1], [0, 0, 0, 1], [0, 0, 1, 0], [1, 0, 1, 0], [0, 1, 1, 0], [0, 0, 0, 1], [0, 1, 1, 0], [0, 1, 1, 1], [0, 0, 0, 1], [1, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 1], [1, 0, 0, 1], [0, 1, 1, 0]],
+[[1, 0, 0, 1], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1], [1, 0, 1, 0], [0, 1, 1, 0], [1, 0, 0, 1], [1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [1, 0, 0, 1], [0, 1, 0, 0], [1, 1, 0, 1], [0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [0, 0, 1, 1], [1, 1, 0, 0]],
+[[0, 1, 1, 1], [0, 1, 0, 1], [1, 1, 0, 1], [1, 0, 0, 1], [0, 1, 1, 0], [0, 1, 0, 1], [0, 1, 1, 1], [0, 0, 1, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [0, 0, 1, 1], [0, 1, 0, 0], [0, 0, 1, 1], [1, 1, 0, 0], [0, 1, 0, 1], [0, 1, 1, 1]],
+[[1, 0, 0, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 1, 0], [1, 0, 1, 0], [1, 1, 1, 0], [1, 0, 1, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 1, 0, 0], [1, 0, 0, 1], [1, 0, 0, 0], [1, 0, 1, 0], [1, 0, 0, 0], [1, 1, 0, 0]]]
+start_x,start_y = green_cordinates[0][0],green_cordinates[0][1]
+flood_maze(robot_x=start_x,robot_y=start_y,flood_arr=flood_array01,setDirection=0,end_des=[19,10])
+for line in flood_array01:
+    print(line)
 
