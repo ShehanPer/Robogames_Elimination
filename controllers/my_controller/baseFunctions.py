@@ -55,7 +55,14 @@ gyro = get_device('gyroScope')
 gps_device = get_device('GPS')
 camera=get_device('camera')
 
+def normalize_angle(angle):
+    """Normalize angle to the range [-π, π]"""
+    return math.atan2(math.sin(angle), math.cos(angle))
 
+def angular_difference(target, current):
+    """Compute shortest difference between two angles in radians."""
+    diff = target - current
+    return (diff + math.pi) % (2 * math.pi) - math.pi  # Keep in range [-π, π]
 ####################################################################
 
 def use_camera(cam):
