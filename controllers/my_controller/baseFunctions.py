@@ -10,12 +10,20 @@ timestep = int(robot.getBasicTimeStep())
 maze_array = np.zeros((20, 20))
 
 # Define a 20x20 grid with all zeros (0 = unvisited, 1 = visited)
-maze_map = [[0] * 20 for _ in range(20)]
+VISITING_MAP = [[0] * 20 for _ in range(20)]
 
 # Initial robot position
 robot_x, robot_y = 19, 10  
 
+ENTRANCE=[19,10]
 DIRECTION_MAP = [(-1,0),(0,1),(1,0),(0,-1)] # UP, RIGHT, DOWN, LEFT
+GREEN_CORDINATES = []
+
+WALL_MAP = [[0] * 20 for _ in range(20)]
+FLOOD_MAP1 = [[-1] * 20 for _ in range(20)]
+FLOOD_MAP2 = [[-1] * 20 for _ in range(20)]
+FLOOD_MAP3 = [[-1] * 20 for _ in range(20)]
+FLOOD_MAP4 = [[-1] * 20 for _ in range(20)]
 
 mark_pos=True
 # Get ultrasonic sensors
@@ -24,9 +32,9 @@ side_sensor_names=['ps7','ps1','ps3','ps5']
 
 
 ######## Other global Variable ########
-green_cordinates = []
-direction_map = [[0] * 20 for _ in range(20)]
-flood_array = [[-1] * 20 for _ in range(20)]
+
+
+
 
 num_boxes= 0
 
@@ -115,7 +123,7 @@ def update_position(direction,robot_x,robot_y):
     cell_x = robot_x + dx
     cell_y = robot_y + dy
 
-    if maze_map[cell_x][cell_y] == 0:
+    if VISITING_MAP[cell_x][cell_y] == 0:
         robot_x = cell_x
         robot_y = cell_y
         return (robot_x,robot_y)
@@ -138,3 +146,11 @@ def directionMap(previous_direction):
     if(previous_direction == 2):
         store_direction = [Directions[1],Directions[0],Directions[3],Directions[2]]
         return store_direction
+    
+
+def reset_flood_map():
+    global FLOOD_MAP
+    FLOOD_MAP = [[-1] * 20 for _ in range(20)]
+
+
+
