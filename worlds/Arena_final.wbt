@@ -12,8 +12,39 @@ WorldInfo {
   basicTimeStep 16
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 1.3750000000000029 1.3799999999999952 14.348552124217779
+  orientation -0.442520622443468 0.7721652273507368 0.45600039515622165 1.7973887054166697
+  position 0.23118604974647347 -2.787645851308137 4.234399739143428
+}
+Pose {
+  translation -1.875 -0.875 0.0002
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0 0
+        }
+      }
+      geometry Plane {
+        size 0.25 0.25
+      }
+    }
+  ]
+}
+DEF orrange_pit1 Transform {
+  translation -1.875 -0.875 8e-05
+  scale 3 3 1
+  children [
+    Shape {
+      appearance Appearance {
+        material Material {
+          diffuseColor 1 0.333333 0
+        }
+      }
+      geometry Plane {
+        size 0.25 0.25
+      }
+    }
+  ]
 }
 TexturedBackground {
 }
@@ -48,30 +79,14 @@ DEF red_pit_1_ Pose {
     }
   ]
 }
-DEF orrange_pit1 Transform {
-  translation 1.375 -0.123 8e-05
+DEF orrange_pit Transform {
+  translation 1.375 -0.127 8e-05
   scale 3 3 1
   children [
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 0.33 0
-        }
-      }
-      geometry Plane {
-        size 0.25 0.25
-      }
-    }
-  ]
-}
-DEF yellow_pit Transform {
-  translation 1.375 -0.127 8e-06
-  scale 5 5 1
-  children [
-    Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 1 1 0.05
+          diffuseColor 1 0.333333 0
         }
       }
       geometry Plane {
@@ -102,23 +117,7 @@ DEF orrange_pit1 Transform {
     Shape {
       appearance Appearance {
         material Material {
-          diffuseColor 1 0.33 0
-        }
-      }
-      geometry Plane {
-        size 0.25 0.25
-      }
-    }
-  ]
-}
-DEF yellow_pit Transform {
-  translation 1.375 1.38 8e-06
-  scale 5 5 1
-  children [
-    Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 1 1 0.05
+          diffuseColor 1 0.333333 0
         }
       }
       geometry Plane {
@@ -606,6 +605,12 @@ Wall {
   rotation 0 0 1 1.5708
   name "85"
   size 0.01 0.25 0.1
+  appearance Roughcast {
+    colorOverride 1 0.333333 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
 }
 Wall {
   translation -2.125 -6.74634e-14 0
@@ -757,6 +762,7 @@ Wall {
   name "110"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0.333333 0
     metalness 0
   }
 }
@@ -766,6 +772,7 @@ Wall {
   name "111"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0 0
     metalness 0
   }
 }
@@ -784,6 +791,7 @@ Wall {
   name "113"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0 0
     metalness 0
   }
 }
@@ -1581,6 +1589,7 @@ Wall {
   name "214"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0.329412 0
     metalness 0
   }
 }
@@ -1589,6 +1598,7 @@ Wall {
   name "215"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0.333333 0
     metalness 0
   }
 }
@@ -1597,6 +1607,7 @@ Wall {
   name "216"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0 0
     metalness 0
   }
 }
@@ -1605,6 +1616,7 @@ Wall {
   name "217"
   size 0.01 0.25 0.1
   appearance PBRAppearance {
+    baseColor 1 0.333333 0
     metalness 0
   }
 }
@@ -1652,6 +1664,12 @@ Wall {
   rotation 0 -1 0 -5.307179586466759e-06
   name "224"
   size 0.01 0.75 0.1
+  appearance Roughcast {
+    colorOverride 1 0.333333 0
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
 }
 Wall {
   translation -2.5 0 0
@@ -1672,7 +1690,11 @@ Wall {
   size 0.01 5 0.1
 }
 AutoNova {
-  translation 0.125 -2.625 0.0225466
-  rotation -0.0009802998226117916 0.0009798453747976831 0.9999990394571883 1.5713404104015822
+  hidden translation_14 0 0.06 0.0098
+  hidden rotation_14 -0.9996497085132406 -0.018714402160641307 0.01871447090255807 4.712034954336378
+  hidden translation_15 0 -0.06 0.0098
+  hidden rotation_15 -0.7695059277033036 -0.4515856115260888 0.45158727029455414 4.453326047624541
+  translation 0.125 -2.625 0.0175649
+  rotation 0 0 1 1.5708
   controller "my_controller"
 }

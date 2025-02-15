@@ -244,8 +244,8 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
 
     # Mark as visited
     maze_map[robot_x][robot_y] = 1
-    for line in maze_map:
-        print(line)
+    # for line in maze_map:
+    #     print(line)
     print("Visited:", robot_x, robot_y)
 
     dir = read_sensors()  # Get sensor readings

@@ -66,10 +66,10 @@ def use_camera(cam):
     img_rgb = image_array[:,:,:3]
 
     left_frame = img_rgb[:,:width//3]
-    middle_frame = img_rgb[height//4:, width//3 : 2*width//3]
+    middle_frame = img_rgb[32*height//36:, width//3 : 2*width//3]
     right_frame = img_rgb[:,2*width//3:]
 
-    cv2.imshow('camera',img_rgb)
+    cv2.imshow('camera',middle_frame)
     cv2.waitKey(1)
     return left_frame,middle_frame,right_frame
 
@@ -86,8 +86,10 @@ def check_grean(left_frame,right_frame):
     return False
 
 def check_orange(middle_frame):
-    orange_pixel =(middle_frame[:,:,0]>200) & (middle_frame[:,:,0]>150) & (middle_frame[:,:,2]<50)
-    if orange_pixel.any():
+    orange_pixel =(middle_frame[:,:,0]<50) & (middle_frame[:,:,2]>200) # Detect orange and Red
+    print(middle_frame[10][10])
+    if orange_pixel.all():
+        print('orange found 🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠')        
         return True
     return False
 
