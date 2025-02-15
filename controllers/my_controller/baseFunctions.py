@@ -3,6 +3,7 @@ import math
 import cv2
 import numpy as np
 
+cv2.namedWindow("camera", cv2.WINDOW_NORMAL)
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 
@@ -87,8 +88,9 @@ def check_grean(left_frame,right_frame):
 
 def check_orange(middle_frame):
     orange_pixel =(middle_frame[:,:,0]<50) & (middle_frame[:,:,2]>200) # Detect orange and Red
-    print(middle_frame[10][10])
-    if orange_pixel.all():
+    orange_ratio = np.sum(orange_pixel)/orange_pixel.size
+    print(orange_ratio)
+    if orange_ratio > 0.6:
         print('orange found 🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠🟠')        
         return True
     return False
