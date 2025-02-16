@@ -102,7 +102,7 @@ def update_Floodposition(direction,robot_x,robot_y,FLOOD_MAP):
     cell_y = robot_y + dy
    
     
-    if FLOOD_MAP[cell_x][cell_y] == -1:
+    if FLOOD_MAP[cell_x][cell_y] == -1 or FLOOD_MAP[cell_x][cell_y] > FLOOD_MAP[robot_x][robot_y]:
         robot_x = cell_x
         robot_y = cell_y
         return (robot_x,robot_y)
@@ -233,25 +233,30 @@ def floodfill_follow(start_pos,target_pos,direction,FLOOD_MAP):
 
 
 
-moveForward()
-search_maze(ENTRANCE[0],ENTRANCE[1],0)
+moveForward() # Enter the maze
+search_maze(ENTRANCE[0],ENTRANCE[1],0)  #Search whole maze and exit
 update_wallMap()
+
 
 for line in WALL_MAP:
     print(line)
 
-moveForward()
 
+moveForward() # Get back into the maze
 
 direction_1=floodfill_follow(ENTRANCE,GREEN_CORDINATES[0],"UP",FLOOD_MAP1)
+robotStop(100) #Taking the survivor
 direction_2=floodfill_follow(GREEN_CORDINATES[0],GREEN_CORDINATES[1],direction_1,FLOOD_MAP2)
+robotStop(100) #Taking the survivor
 direction_3=floodfill_follow(GREEN_CORDINATES[1],GREEN_CORDINATES[2],direction_2,FLOOD_MAP3)
+robotStop(100) #Taking the survivor
 direction_x=floodfill_follow(GREEN_CORDINATES[2],ENTRANCE,direction_3,FLOOD_MAP4)
 
+#Exit the maze
 turnLeft()
 moveBackward()
 
-print(GREEN_CORDINATES)
+
 
 
 
