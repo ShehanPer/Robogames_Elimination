@@ -140,14 +140,12 @@ def flood_maze(target,robot_pos,FLOOD_MAP):
         temp = update_Floodposition(3,target_x,target_y,FLOOD_MAP)
         if (temp):
             FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
-            # setDirection=new_direction
             flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
     
     if cellWalls[2] == 0:  # Up open
         temp = update_Floodposition(0,target_x,target_y,FLOOD_MAP)
         if temp is not None:
             FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
-            # setDirection=new_direction
             flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
 
 
