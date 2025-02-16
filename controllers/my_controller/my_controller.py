@@ -128,27 +128,27 @@ def flood_maze(target,robot_pos,FLOOD_MAP):
         temp = update_Floodposition(2,target_x,target_y,FLOOD_MAP)
         if (temp):
             FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
-            flood_maze((temp[0],temp[1]),robot_pos)
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
 
     if cellWalls[1] == 0:  # Right open
         temp = update_Floodposition(1,target_x,target_y,FLOOD_MAP)
         if (temp):
             FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
-            flood_maze((temp[0],temp[1]),robot_pos)
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
 
     if cellWalls[3] == 0:  # Left open
         temp = update_Floodposition(3,target_x,target_y,FLOOD_MAP)
         if (temp):
             FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
             # setDirection=new_direction
-            flood_maze((temp[0],temp[1]),robot_pos)
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
     
     if cellWalls[2] == 0:  # Up open
         temp = update_Floodposition(0,target_x,target_y,FLOOD_MAP)
         if temp is not None:
             FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
             # setDirection=new_direction
-            flood_maze((temp[0],temp[1]),robot_pos)
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
 
 
 
@@ -189,8 +189,10 @@ def floodfillturn(current_direction,next_direction):
 
 def floodfill_follow(start_pos,target_pos,direction,FLOOD_MAP):
     '''follow 0 position in flood array from current position'''
-
+    global mark_pos
+    print(direction)
     flood_maze(target_pos,start_pos,FLOOD_MAP)
+    mark_pos=True
     for line in FLOOD_MAP:
         print(" ".join(f"{num:3}" for num in line))
     robot_x,robot_y = start_pos
@@ -199,6 +201,7 @@ def floodfill_follow(start_pos,target_pos,direction,FLOOD_MAP):
     facing_direction=direction #initial direction
     while FLOOD_MAP[robot_x][robot_y]!=0 and robot.step(timestep)!=-1 : 
         walls=WALL_MAP[robot_x][robot_y] 
+        print("Now at ",(robot_x,robot_y))
         if robot_x<19 and FLOOD_MAP[robot_x+1][robot_y]==FLOOD_MAP[robot_x][robot_y]-1 and walls[0]!=1: #down
             floodfillturn(facing_direction,"DOWN")
             facing_direction="DOWN"
@@ -222,6 +225,7 @@ def floodfill_follow(start_pos,target_pos,direction,FLOOD_MAP):
         else:
             print("Error : No path found")
             return
+        print("Going to",(robot_x,robot_y))
         moveForward()
     return facing_direction
 
@@ -238,13 +242,16 @@ for line in WALL_MAP:
 
 moveForward()
 
+
 direction_1=floodfill_follow(ENTRANCE,GREEN_CORDINATES[0],"UP",FLOOD_MAP1)
 direction_2=floodfill_follow(GREEN_CORDINATES[0],GREEN_CORDINATES[1],direction_1,FLOOD_MAP2)
 direction_3=floodfill_follow(GREEN_CORDINATES[1],GREEN_CORDINATES[2],direction_2,FLOOD_MAP3)
 direction_x=floodfill_follow(GREEN_CORDINATES[2],ENTRANCE,direction_3,FLOOD_MAP4)
 
+turnLeft()
+moveBackward()
 
-
+print(GREEN_CORDINATES)
 
 
 
