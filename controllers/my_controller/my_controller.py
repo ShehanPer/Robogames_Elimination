@@ -1,382 +1,51 @@
 """my_controller controller."""
 
-from controller import Robot
-import math
-import cv2
-import numpy as np
-
-
-
-# Create the Robot instance
-robot = Robot()
-
-# Get the time step of the current world
-timestep = int(robot.getBasicTimeStep())
-
-# Directions mapping (dx, dy)
-DIRECTION_MAP = [(-1,0),(0,1),(1,0),(0,-1)] # UP, RIGHT, DOWN, LEFT
-maze_array = np.zeros((20, 20))
-
-# Define a 20x20 grid with all zeros (0 = unvisited, 1 = visited)
-maze_map = [[0] * 20 for _ in range(20)]
-
-# Initial robot position
-robot_x, robot_y = 19, 10  # Assuming the robot starts at (0, 0)
-
-
-# Function to get device instances
-def get_device(device_name):
-    device = robot.getDevice(device_name)
-    if device:
-        device.enable(timestep)
-    return device
-
-
-# Get ultrasonic sensors
-us_names = ['ps4', 'ps2', 'ps0','ps8']  # Front, Left, Right
-IR_sensors = [get_device(name) for name in us_names]
-side_sensor_names=['ps7','ps1','ps3','ps5']
-IR_side_sensors = [get_device(name) for name in side_sensor_names]
-green_cordinates = []
-direction_map = [[0] * 20 for _ in range(20)]
-
-L_encoder = get_device('left encoder')
-R_encoder = get_device('right encoder')
-
-L_motor = robot.getDevice('left motor')
-R_motor = robot.getDevice('right motor')
-
-L_motor.setPosition(float('inf'))
-R_motor.setPosition(float('inf'))
-
-L_motor.setVelocity(0)
-R_motor.setVelocity(0)  
-
-inertial_unit =get_device('Inertial Unit')
-gyro = get_device('gyroScope')
-
-gps_device = get_device('GPS')
-camera=get_device('camera')
-
-
-def delay(time):
-    for _ in range(int(time * 1000 / timestep)):
-        robot.step(timestep)
-
-# Function to convert ultrasonic readings (depends on the LUT)
-def ir_to_distance(value):
-    return value * 0.01  # Adjust scaling based on your lookup table
-
-def normalize_angle(angle):
-    """Normalize angle to the range [-π, π]"""
-    return math.atan2(math.sin(angle), math.cos(angle))
-
-def angular_difference(target, current):
-    """Compute shortest difference between two angles in radians."""
-    diff = target - current
-    return (diff + math.pi) % (2 * math.pi) - math.pi  # Keep in range [-π, π]
-
-def check_grean(left_frame,right_frame,robot_x,robot_y):
-    grean_pixel =(left_frame[:,:,1]>200) & (left_frame[:,:,0]<100) & (left_frame[:,:,2]<100)
-    grean_pixel2 =(right_frame[:,:,1]>200) & (right_frame[:,:,0]<100) & (right_frame[:,:,2]<100)
-    if (grean_pixel.any() or grean_pixel2.any()):
-        if(IR_sensors[1].getValue()>800):
-            print('grean found 🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢')
-            delay(5)
-            green_cordinates.append([robot_x,robot_y])
-
-def check_yellow(middle_frame,robot_x,robot_y): 
-    pass
-
-def use_camera(cam,robot_x,robot_y):
-    image =cam.getImage()
-    width = cam.getWidth()
-    height = cam.getHeight()
-
-    image_array = np.frombuffer(image,dtype=np.uint8).reshape((height,width,4))
-    img_bgr = cv2.cvtColor(image_array,cv2.COLOR_RGB2BGR)
-    img_rgb = image_array[:,:,:3]
-
-    left_frame = img_rgb[:,:width//3]
-    middle_frame = img_rgb[:,width//3:2*width//3]
-    right_frame = img_rgb[:,2*width//3:]
-    
-
-
-    new_height = int(height*2)
-    new_width = int(width*2)
-    img_resize = cv2.resize(img_rgb,(new_width,new_height),interpolation=cv2.INTER_LINEAR)
-    check_grean(left_frame,right_frame,robot_x,robot_y)
-    cv2.imshow('camera',img_rgb)
-    cv2.waitKey(1)
-
-
-
-def adjest_positionF():
-    
-    IR_readings = [IR_sensors[i].getValue() for i in range(3)]
-    if  800<IR_readings[1]:
-        
-        while robot.step(timestep) != -1:
-            IR_readings = [IR_sensors[i].getValue() for i in range(3)]
-            if IR_readings[1]-880!=0:
-                deff = (IR_readings[1]-880)/abs(IR_readings[1]-880)
-                L_motor.setVelocity(-2*deff)
-                R_motor.setVelocity(-2*deff)
-                if 878<IR_readings[1]<882:
-                    L_motor.setVelocity(0)
-                    R_motor.setVelocity(0)
-                    break
-            else:
-                break
-
-def adjest_positionB():
-    IR_readings = [IR_sensors[i].getValue() for i in range(4)]
-    if  800<IR_readings[3]:
-        
-        while robot.step(timestep) != -1:
-            IR_readings = [IR_sensors[i].getValue() for i in range(4)]
-
-            if IR_readings[3]-880!=0:
-                deff = (IR_readings[3]-880)/abs(IR_readings[3]-880)
-                L_motor.setVelocity(2*deff)
-                R_motor.setVelocity(2*deff)
-
-                if 878<IR_readings[3]<882:
-                    L_motor.setVelocity(0)
-                    R_motor.setVelocity(0)
-                    break
-            else:
-                break
-
-def adjest_positionRotation():
-    
-    side_IR_readings = [IR_side_sensors[i].getValue() for i in range(4)]
-    #print(side_IR_readings)
-    if  800<side_IR_readings[0] and 800<side_IR_readings[1] :
-            
-            while robot.step(timestep) != -1:
-                side_IR_readings = [IR_side_sensors[i].getValue() for i in range(4)]
-                if (side_IR_readings[0]-side_IR_readings[1])!=0:
-                    deff = (side_IR_readings[0]-side_IR_readings[1])/abs(side_IR_readings[0]-side_IR_readings[1])
-                    # print('adjesting rot left')
-                    L_motor.setVelocity(-1*deff)
-                    R_motor.setVelocity(1*deff)
-                    if abs(side_IR_readings[0]-side_IR_readings[1])<2:
-                        L_motor.setVelocity(0)
-                        R_motor.setVelocity(0)
-                        break
-                else:
-                    break
-    elif  800<side_IR_readings[2] and 800<side_IR_readings[3] :
-            
-            while robot.step(timestep) != -1:
-                side_IR_readings = [IR_side_sensors[i].getValue() for i in range(4)]
-                if (side_IR_readings[2]-side_IR_readings[3])!=0:
-                    deff = (side_IR_readings[2]-side_IR_readings[3])/abs(side_IR_readings[2]-side_IR_readings[3])
-                    #print('adjesting rot right', abs(side_IR_readings[2]-side_IR_readings[3]))
-
-                    L_motor.setVelocity(-1*deff)
-                    R_motor.setVelocity(1*deff)
-                    if abs(side_IR_readings[2]-side_IR_readings[3])<2:
-                        L_motor.setVelocity(0)
-                        R_motor.setVelocity(0)
-                        break
-                else:
-                    break
-
-
-def moveForward():
-    global adj_pos
-    robot.step(timestep)
-    start_gpsVal=gps_device.getValues()
-
-    while robot.step(timestep) != -1:
-        # Get encoder values and subtract offset
-        current_gpsVal = gps_device.getValues()
-        # if adj_pos:
-        #     adjest_positionRotation()
-        L_motor.setVelocity(8)
-        R_motor.setVelocity(8)
-            
-        
-        # Compute traveled distance
-        distance_x,distance_y = abs(current_gpsVal[0]-start_gpsVal[0])*100,abs(current_gpsVal[1]-start_gpsVal[1])*100
-        
-        if(25<distance_x<26 or 25<distance_y<26):
-           
-            print("stop forward")
-            L_motor.setVelocity(0)
-            R_motor.setVelocity(0)
-            robot.step(timestep*10)
-            adjest_positionF()
-            break
-
-def moveBackward():
-       
-    robot.step(timestep)
-    start_gpsVal=gps_device.getValues()
-
-    while robot.step(timestep) != -1:
-        # Get encoder values and subtract offset
-        current_gpsVal = gps_device.getValues()
-        L_motor.setVelocity(-8)
-        R_motor.setVelocity(-8)
-
-        # Compute traveled distance
-        distance_x,distance_y = abs(current_gpsVal[0]-start_gpsVal[0])*100,abs(current_gpsVal[1]-start_gpsVal[1])*100
-        
-        if(25<distance_x<26 or 25<distance_y<26):
-            stoping =True
-            print("stop backward")
-            L_motor.setVelocity(0)
-            R_motor.setVelocity(0)
-            robot.step(timestep*10)
-            adjest_positionB()
-            break
-
-def turnRight():
-    #turn 90 degree Right
-    robot.step(timestep)
-    initial_Ryaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])  # Initial yaw
-    target_angleR = normalize_angle(initial_Ryaw - math.radians(90))  # Target yaw (-90°)
-
-    L_motor.setVelocity(5)
-    R_motor.setVelocity(-5)
-
-    while robot.step(timestep) != -1:
-        current_Ryaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])
-        yaw_diffR = math.degrees(abs(angular_difference(target_angleR, current_Ryaw)))  # Fix wraparound
-
-        if abs(yaw_diffR)<1:  # Stop when true yaw difference reaches 90°
-            #print("Turn right Complete! Stopping motors.")
-            L_motor.setVelocity(0)
-            R_motor.setVelocity(0)
-            adjest_positionRotation()
-            break
-
-    robot.step(timestep * 10)
-    
-def turnLeft():
-    #turn 90 degree Left
-    robot.step(timestep)    
-    initial_Lyaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])  # Extract yaw angle
-   
-    target_angleL= normalize_angle(initial_Lyaw+math.radians(90))  # Target yaw (-90 degrees)
-    
-    #print(f"Starting turn | Initial Yaw: {math.degrees(initial_Lyaw):.2f}° | Target Yaw: {math.degrees(target_angleL):.2f}°")
-    
-    L_motor.setVelocity(-5)
-    R_motor.setVelocity(5)
-
-    while(robot.step(timestep) != -1):
-        cuurent_Lyaw = normalize_angle(inertial_unit.getRollPitchYaw()[2])
-
-        yaw_diffL = math.degrees(abs(angular_difference(target_angleL, cuurent_Lyaw))) 
-
-        #print(f"Yaw: {math.degrees(cuurent_Lyaw):.2f}° | ΔYaw: {yaw_diffL:.2f}° ")
-        
-      
-        if(abs(yaw_diffL)<1):
-            #print("Turn left Complete! Stopping motors.")
-            L_motor.setVelocity(0)
-            R_motor.setVelocity(0)
-            adjest_positionRotation()
-            break
-    robot.step(timestep*10)
-
-
-
-    robot.step(timestep * 10)  # Small delay after turning
-       
-def turnReverse():
-    turnRight()
-    turnRight()
-
-def robotStop(getTime):
-    L_motor.setVelocity(0)
-    R_motor.setVelocity(0)
-    robot.step(timestep*getTime)
-    
-
-
-def read_sensors():
-    dir = [1 if IR_sensors[i].getValue() > 750 else 0 for i in range(4)]
-    return dir
-
-def directionMap(previous_direction):
-    store_direction = []
-    Directions = read_sensors()
-    if(previous_direction == 0):
-        store_direction = [Directions[3],Directions[2],Directions[1],Directions[0]]
-        return store_direction
-    if(previous_direction == 1):
-        store_direction = [Directions[2],Directions[1],Directions[0],Directions[3]]
-        return store_direction
-    if(previous_direction == 3):
-        store_direction = [Directions[0],Directions[3],Directions[2],Directions[1]]
-        return store_direction
-    if(previous_direction == 2):
-        store_direction = [Directions[1],Directions[0],Directions[3],Directions[2]]
-        return store_direction
-    
+from baseFunctions import *
+from movements import *
 
 
 def backtrack(previous_direction):
-    """Turn the robot back to the original direction and move forward"""
+    """make the robot to follow the path it came from """
     moveBackward()
     if previous_direction == "LEFT":
-        #print("Backtracking LEFT")
         turnRight()
 
     elif previous_direction == "RIGHT":
-        #print("Backtracking RIGHT")
         turnLeft()
     else:
-        print("Backtracking UP")
+        print("")
 
     
-def update_position(direction,robot_x,robot_y):
-    """Update (x, y) based on movement direction"""
-
-    dx, dy = DIRECTION_MAP[direction]
-    cell_x = robot_x + dx
-    cell_y = robot_y + dy
-
-    if maze_map[cell_x][cell_y] == 0:
-        robot_x = cell_x
-        robot_y = cell_y
-        return (robot_x,robot_y)
-    return None
-
-
 
 def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
     """Recursive maze search with proper backtracking"""
-    global maze_map, direction_map
+    global VISITING_MAP, WALL_MAP,GREEN_CORDINATES
 
     temp_Direction = setDirection
-    use_camera(camera,robot_x,robot_y)
-    store_Direction = directionMap(setDirection)
-    direction_map[robot_x][robot_y] = store_Direction
+    lframe,mframe,rframe=use_camera(camera)
+
+    if check_grean(lframe,rframe):
+        GREEN_CORDINATES.append([robot_x,robot_y])
+
+    if check_orange(mframe):
+        store_Direction=[1,1,1,1]
+    else:
+        store_Direction = directionMap(setDirection)
+    
+    WALL_MAP[robot_x][robot_y] = store_Direction
 
     if not (0 <= robot_x < 20 and 0 <= robot_y < 20):
         print("Out of bounds")
-        return  # Out of bounds
+        return  
 
-    # Mark as visited
-    maze_map[robot_x][robot_y] = 1
-    for line in maze_map:
-        print(line)
+    VISITING_MAP[robot_x][robot_y] = 1   # Mark as visited
+   
     print("Visited:", robot_x, robot_y)
 
     dir = read_sensors()  # Get sensor readings
 
-    
-
 
     if dir[0] == 0:  # Left open
-        print("Left open")
         new_direction = (temp_Direction - 1) % 4
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
@@ -386,7 +55,6 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
             search_maze(temp[0],temp[1],new_direction,"LEFT")
 
     if dir[1] == 0:  # Forward open
-        print("Forward open")
         new_direction = temp_Direction
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
@@ -394,7 +62,6 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
             search_maze(temp[0],temp[1],new_direction,"UP")
 
     if dir[2] == 0:  # Right open
-        print("Right open")
         new_direction = (temp_Direction + 1) % 4
         temp = update_position(new_direction,robot_x,robot_y)
         if (temp):
@@ -406,12 +73,190 @@ def search_maze(robot_x,robot_y,setDirection,previous_direction=None):
     backtrack(previous_direction)  # Backtrack if no movement possible
 
 
-moveForward()
-search_maze(robot_x=19,robot_y=10,setDirection=0)
-print("Maze Search completed")
-print("Green Cordinates",green_cordinates)
-print("Direction Map")
-for line in direction_map:
+
+def getWalls(robot_x,robot_y):
+    '''return the wall configuration around the cell including effect of fire pits'''
+    wallConfig=[1,1,1,1]
+    if robot_x!=19:
+        wallConfig[0]=WALL_MAP[robot_x][robot_y][0] | WALL_MAP[robot_x+1][robot_y][2]
+    if robot_x!=0:
+        wallConfig[2]=WALL_MAP[robot_x][robot_y][2] | WALL_MAP[robot_x-1][robot_y][0]
+    if robot_y!=19:
+        wallConfig[1]=WALL_MAP[robot_x][robot_y][1] | WALL_MAP[robot_x][robot_y+1][3]
+    if robot_y!=0:
+        wallConfig[3]=WALL_MAP[robot_x][robot_y][3] | WALL_MAP[robot_x][robot_y-1][1]
+
+    return wallConfig
+        
+def update_wallMap():
+    global WALL_MAP
+    for i in range(20):
+        for j in range(20):
+            walls=getWalls(i,j)
+            WALL_MAP[i][j]=walls
+
+def update_Floodposition(direction,robot_x,robot_y,FLOOD_MAP):
+    """Update (x, y) based on movement direction"""
+    dx, dy = DIRECTION_MAP[direction]
+    cell_x = robot_x + dx
+    cell_y = robot_y + dy
+   
+    
+    if FLOOD_MAP[cell_x][cell_y] == -1 or FLOOD_MAP[cell_x][cell_y] > FLOOD_MAP[robot_x][robot_y]:
+        robot_x = cell_x
+        robot_y = cell_y
+        return (robot_x,robot_y)
+    return None
+
+def flood_maze(target,robot_pos,FLOOD_MAP):
+    '''create flood array to find the shortest target to robot'''
+    global WALL_MAP,mark_pos
+
+    target_x,target_y = target
+
+    if not (0 <= target_x < 20 and 0 <= target_y < 20):
+        return  # Out of bounds
+    if FLOOD_MAP[target_x][target_y]==robot_pos:
+        return
+    if mark_pos:
+        FLOOD_MAP[target_x][target_y] = 0
+        mark_pos=False
+    cellWalls = WALL_MAP[target_x][target_y]  # Get sensor readings
+
+    
+    if cellWalls[0] == 0:  # down open
+        temp = update_Floodposition(2,target_x,target_y,FLOOD_MAP)
+        if (temp):
+            FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
+
+    if cellWalls[1] == 0:  # Right open
+        temp = update_Floodposition(1,target_x,target_y,FLOOD_MAP)
+        if (temp):
+            FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
+
+    if cellWalls[3] == 0:  # Left open
+        temp = update_Floodposition(3,target_x,target_y,FLOOD_MAP)
+        if (temp):
+            FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
+    
+    if cellWalls[2] == 0:  # Up open
+        temp = update_Floodposition(0,target_x,target_y,FLOOD_MAP)
+        if temp is not None:
+            FLOOD_MAP[temp[0]][temp[1]] = FLOOD_MAP[target_x][target_y]+1
+            flood_maze((temp[0],temp[1]),robot_pos,FLOOD_MAP)
+
+
+
+def floodfillturn(current_direction,next_direction):
+    '''Turning logic when following floodfill path'''
+    if current_direction=="UP":
+        if next_direction=="DOWN":
+            turnReverse()
+        elif next_direction=="LEFT":
+            turnLeft()
+        elif next_direction=="RIGHT":
+            turnRight()
+    
+    elif current_direction=="DOWN":
+        if next_direction=="UP":
+            turnReverse()
+        elif next_direction=="LEFT":
+            turnRight()
+        elif next_direction=="RIGHT":
+            turnLeft()
+    
+    elif current_direction=="LEFT":
+        if next_direction=="RIGHT":
+            turnReverse()
+        elif next_direction=="UP":
+            turnRight()
+        elif next_direction=="DOWN":
+            turnLeft()
+    
+    elif current_direction=="RIGHT":
+        if next_direction=="LEFT":
+            turnReverse()
+        elif next_direction=="UP":
+            turnLeft()
+        elif next_direction=="DOWN":
+            turnRight()
+
+
+def floodfill_follow(start_pos,target_pos,direction,FLOOD_MAP):
+    '''follow 0 position in flood array from current position'''
+    global mark_pos
+    print(direction)
+    flood_maze(target_pos,start_pos,FLOOD_MAP)
+    mark_pos=True
+    for line in FLOOD_MAP:
+        print(" ".join(f"{num:3}" for num in line))
+    robot_x,robot_y = start_pos
+
+    ## This while loop will take robot from start position to traget position
+    facing_direction=direction #initial direction
+    while FLOOD_MAP[robot_x][robot_y]!=0 and robot.step(timestep)!=-1 : 
+        walls=WALL_MAP[robot_x][robot_y] 
+        print("Now at ",(robot_x,robot_y))
+        if robot_x<19 and FLOOD_MAP[robot_x+1][robot_y]==FLOOD_MAP[robot_x][robot_y]-1 and walls[0]!=1: #down
+            floodfillturn(facing_direction,"DOWN")
+            facing_direction="DOWN"
+            robot_x+=1
+            
+        elif robot_x>0 and FLOOD_MAP[robot_x-1][robot_y]==FLOOD_MAP[robot_x][robot_y]-1 and walls[2]!=1: #up
+            floodfillturn(facing_direction,"UP")
+            facing_direction="UP"
+            robot_x-=1
+            
+        elif robot_y<19 and FLOOD_MAP[robot_x][robot_y+1]==FLOOD_MAP[robot_x][robot_y]-1 and walls[1]!=1: #right
+            floodfillturn(facing_direction,"RIGHT")
+            facing_direction="RIGHT"
+            robot_y+=1
+            
+        elif robot_y>0 and FLOOD_MAP[robot_x][robot_y-1]==FLOOD_MAP[robot_x][robot_y]-1 and walls[3]!=1: #left
+            floodfillturn(facing_direction,"LEFT")
+            facing_direction="LEFT"
+            robot_y-=1
+
+        else:
+            print("Error : No path found")
+            return
+        print("Going to",(robot_x,robot_y))
+        moveForward()
+    return facing_direction
+
+    
+
+
+
+moveForward() # Enter the maze
+search_maze(ENTRANCE[0],ENTRANCE[1],0)  #Search whole maze and exit
+update_wallMap()
+
+
+for line in WALL_MAP:
     print(line)
-robotStop(20)
+
+
+moveForward() # Get back into the maze
+
+direction_1=floodfill_follow(ENTRANCE,GREEN_CORDINATES[0],"UP",FLOOD_MAP1)
+robotStop(100) #Taking the survivor
+direction_2=floodfill_follow(GREEN_CORDINATES[0],GREEN_CORDINATES[1],direction_1,FLOOD_MAP2)
+robotStop(100) #Taking the survivor
+direction_3=floodfill_follow(GREEN_CORDINATES[1],GREEN_CORDINATES[2],direction_2,FLOOD_MAP3)
+robotStop(100) #Taking the survivor
+direction_x=floodfill_follow(GREEN_CORDINATES[2],ENTRANCE,direction_3,FLOOD_MAP4)
+
+#Exit the maze
+turnLeft()
+moveBackward()
+
+
+
+
+
+
 
