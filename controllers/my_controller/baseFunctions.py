@@ -3,11 +3,10 @@ import math
 import cv2
 import numpy as np
 
-cv2.namedWindow("camera", cv2.WINDOW_NORMAL)
 robot = Robot()
 timestep = int(robot.getBasicTimeStep())
 
-
+print(timestep)
 ######## Main Variable ################
 
 VISITING_MAP = [[0] * 20 for _ in range(20)] #20x20 grid (0 = unvisited, 1 = visited)
@@ -78,8 +77,8 @@ def use_camera(cam):
     middle_frame = img_rgb[32*height//36:, width//3 : 2*width//3]
     right_frame = img_rgb[:,2*width//3:]
 
-    cv2.imshow('camera',img_rgb)
-    cv2.waitKey(1)
+    # cv2.imshow('camera',img_rgb)
+    # cv2.waitKey(1)
     return left_frame,middle_frame,right_frame
 
 

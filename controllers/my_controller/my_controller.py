@@ -2,6 +2,7 @@
 
 from baseFunctions import *
 from movements import *
+import math
 
 
 def backtrack(previous_direction):
@@ -227,8 +228,35 @@ def floodfill_follow(start_pos,target_pos,direction,FLOOD_MAP):
         moveForward()
     return facing_direction
 
-    
+def find_next_nearest(coords, current):
+    """Finds the nearest coordinate to the given current coordinate."""
+    min_distance = float('inf')
+    nearest_coord = None
 
+    for coord in coords:
+        distance = math.sqrt((current[0] - coord[0]) ** 2 + (current[1] - coord[1]) ** 2)
+        if distance < min_distance:
+            min_distance = distance
+            nearest_coord = coord
+
+    return nearest_coord, min_distance
+
+def rearangeGreenCoordinates(GREEN_CORDINATES, ENTRANCE):
+    """Rearranges coordinates using a nearest-neighbor approach."""
+    if not GREEN_CORDINATES:
+        return []
+
+    current = ENTRANCE
+    sorted_coordinates = []
+    remaining = GREEN_CORDINATES.copy()  # Copy to avoid modifying the original list
+
+    while remaining:
+        next_coord, _ = find_next_nearest(remaining, current)
+        sorted_coordinates.append(next_coord)
+        remaining.remove(next_coord)
+        current = next_coord  # Move to the next coordinate
+
+    return sorted_coordinates  
 
 
 moveForward() # Enter the maze
@@ -239,15 +267,20 @@ update_wallMap()
 for line in WALL_MAP:
     print(line)
 
+GREEN_CORDINATES = rearangeGreenCoordinates(GREEN_CORDINATES, ENTRANCE)
+print("Rearranged Coordinates:", GREEN_CORDINATES)
+
+robotStop(500)
 
 moveForward() # Get back into the maze
 
+
 direction_1=floodfill_follow(ENTRANCE,GREEN_CORDINATES[0],"UP",FLOOD_MAP1)
-robotStop(100) #Taking the survivor
+robotStop(300) #Taking the survivor
 direction_2=floodfill_follow(GREEN_CORDINATES[0],GREEN_CORDINATES[1],direction_1,FLOOD_MAP2)
-robotStop(100) #Taking the survivor
+robotStop(300) #Taking the survivor
 direction_3=floodfill_follow(GREEN_CORDINATES[1],GREEN_CORDINATES[2],direction_2,FLOOD_MAP3)
-robotStop(100) #Taking the survivor
+robotStop(300) #Taking the survivor
 direction_x=floodfill_follow(GREEN_CORDINATES[2],ENTRANCE,direction_3,FLOOD_MAP4)
 
 #Exit the maze
